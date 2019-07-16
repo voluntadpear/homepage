@@ -9,7 +9,7 @@ const IndexPage = () => {
   const [nightMode, setNightMode] = useState(false)
   return (
     <Layout nightMode={nightMode}>
-      <SEO title="Home" />
+      <SEO noTitle={true} />
       <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0">
         <ProfileCard nightMode={nightMode} />
         {/* Pin to top right corner */}
