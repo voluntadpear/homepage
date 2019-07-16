@@ -36,6 +36,7 @@ module.exports = {
         tailwind: true,
         purgeOnly: ["src/css/style.css"]
       }
-    }
+    },
+    `gatsby-plugin-netlify`
   ],
 }
