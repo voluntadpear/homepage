@@ -10,7 +10,7 @@ const ProfileCardFooter = () => (
       aria-label="My Github"
     >
       <svg
-        className="h-6 fill-current text-blue-700 hover:text-blue-800"
+        className="h-6 fill-current profile-footer-icon hover:text-blue-800"
         role="img"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@ const ProfileCardFooter = () => (
     aria-label="My LinkedIn"
   >
     <svg
-      className="h-6 text-blue-700 fill-current hover:text-blue-800"
+      className="h-6 profile-footer-icon fill-current hover:text-blue-800"
       role="img"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"

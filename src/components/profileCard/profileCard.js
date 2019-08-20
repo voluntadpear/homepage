@@ -3,12 +3,10 @@ import ProfileCardHeader from "./profileCardHeader";
 import ProfileCardBody from "./profileCardBody";
 import ProfileCardFooter from "./profileCardFooter";
 
-const ProfileCard = ({ nightMode }) => (
+const ProfileCard = () => (
   <div
     id="profile"
-    className={`w-fullbg-teal-700 rounded-lg lg:rounded-l-lg lg:rounded-r-lg shadow-lg ${
-      nightMode ? "bg-gray-900" : "bg-white"
-    } opacity-75 mx-6 lg:mx-0`}
+    className={`md:w-1/2 lg:w-2/3 rounded-lg shadow-lg`}
   >
   <div className="p-4 md:p-12 text-center lg:text-left">
     <ProfileCardHeader />

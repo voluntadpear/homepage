@@ -3,3 +3,34 @@
 @tailwind components;
 
 @tailwind utilities;
+
+body {
+  @apply bg-background-light text-black;
+  --link: #2b6cb0;
+}
+body.dark {
+  @apply bg-background-dark text-white;
+  --link: #f0bc11;
+}
+body #profile {
+  @apply bg-card-light;
+}
+body.dark #profile {
+  @apply bg-card-dark;
+}
+body #latest-blog-posts {
+  @apply bg-latestposts-light;
+}
+body.dark #latest-blog-posts {
+  @apply bg-latestposts-dark;
+}
+body .profile-footer-icon {
+  color: #4299e1;
+}
+body.dark .profile-footer-icon {
+  color: #c8daee;
+}
+
+.default-link {
+  color: var(--link)
+}

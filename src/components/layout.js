@@ -8,11 +8,15 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-const Layout = ({ children, nightMode }) => {
+import NightModeToggle from './nightModeToggle'
+
+
+const Layout = ({ children, trackingWider }) => {
   return (
-    <div className={`font-sans antialiased ${nightMode ? 'text-gray-100' : 'text-gray-900'} leading-normal tracking-wider`}>
-      <main>{children}</main>
-    </div>
+      <div className={`font-sans antialiased theme-text-color leading-normal ${trackingWider ? 'tracking-wider' : ''}`}>
+        <main>{children}</main>
+        <NightModeToggle />
+      </div>
   )
 }
 

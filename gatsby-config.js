@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `Guillermo Prealta`,
+    title: `Guillermo`,
     description: `The one who codes`,
     author: `@voluntadpear`,
   },
@@ -13,13 +13,41 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `markdown-pages`,
+        path: `${__dirname}/blog`,
+      },
+    },
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
+              inlineCodeMarker: '>'
+            }
+          },
+          `gatsby-remark-external-links`,
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 590,
+            },
+          },
+          `gatsby-remark-smartypants`
+        ],
+      },
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `Guillermo Peralta`,
+        short_name: `Guillermo`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
@@ -37,6 +65,8 @@ module.exports = {
         purgeOnly: ["src/css/style.css"]
       }
     },
+    `gatsby-plugin-dark-mode`,
+    `gatsby-plugin-netlify-cms`,
     `gatsby-plugin-netlify`
   ],
 }

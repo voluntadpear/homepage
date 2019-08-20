@@ -1,0 +1,82 @@
+.blog-post-content p, .blog-post-content h2, .blog-post-content h3 {
+  @apply mb-8;
+}
+
+.blog-post-content h2 {
+  @apply text-2xl font-bold;
+}
+
+.blog-post-content h3 {
+  @apply text-xl font-bold;
+}
+
+.blog-post-content a {
+  @apply text-blue-500 underline;
+}
+
+.blog-post-content a {
+  color: var(--link);
+}
+
+.blog-post-content p a:hover {
+  @apply no-underline;
+}
+
+.blog-post-content ul {
+  @apply list-disc mb-8;
+}
+
+.blog-post-content li {
+  @apply mb-4;
+}
+
+.ludwig {
+
+  &:before, &:after {
+      content: '\201C';
+      font-family: 'Sanchez';
+      color: lighten($black, 40%);
+   }
+   &:after {
+      content: '\201D';
+   }
+}
+.blog-post-content blockquote {
+  position: relative;
+  padding-left: 1em;
+  border-left: 0.2em solid #000;
+  font-weight: 300;
+}
+
+body.dark .blog-post-content blockquote {
+  border-left: 0.2em solid #aaa;
+}
+
+.blog-post-content .gatsby-highlight-code-line {
+  background-color: #393e46;
+  display: block;
+  margin-right: -1em;
+  margin-left: -1em;
+  padding-right: 1em;
+  padding-left: 0.75em;
+  border-left: 0.25em solid #F08700;
+}
+
+.blog-post-content .gatsby-highlight {
+  @apply mb-8;
+  background-color: #2d2d2d;
+  border-radius: 0.3em;
+  margin: 0.5em -1.3125em;
+  padding: 1em;
+  overflow: auto;
+}
+
+.blog-post-content .gatsby-highlight pre[class*="language-"] {
+  @apply rounded-lg text-sm;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  overflow: initial;
+  float: left; /* 1 */
+  min-width: 100%; /* 2 */
+}
