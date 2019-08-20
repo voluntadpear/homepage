@@ -1,4 +1,7 @@
 # My Personal Site!
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2ffa77cc-b146-465c-98cc-90491cd14317/deploy-status)](https://app.netlify.com/sites/goshi/deploys)
+
+💻 📱 [https://goshi.dev](https://goshi.dev)
 
 To run locally:
 ```js
