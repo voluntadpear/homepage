@@ -10,6 +10,7 @@ Vue recently presented the [Vue Composition API RFC](https://vue-composition-api
 
 The Vue core team made a great emphasis on assuring the community that this new API won't make the original API (now informally referred as the "Options-based API") disappear, and we will be even be able to [combine both components API](https://vue-composition-api-rfc.netlify.com/#usage-alongside-existing-api) together.
 
+## Number of executions of the code
 React hooks allow you to "hook into" React functionalities like the component state and side effects handling. You make use of hooks inside function components so each time the component renders, the hooks are evaluated. This is one of the first differences we can identify between React Hooks and Vue Composition API, **React hooks run each time the component renders while Vue setup function is only executed once**. Because React Hooks can get executed multiple times, there are [certain rules](https://reactjs.org/docs/hooks-rules.html) the render function must follow, one of them being:
 
 > Don’t call Hooks inside loops, conditions, or nested functions. 
@@ -69,3 +70,57 @@ watch(function persistForm() => {
     localStorage.setItem('formData', name.value);
   }
 });
+```
+
+This same recommendation is what we need to fix the React example:
+```js
+useEffect(function persistForm() {
+  if (name !== '') {
+      localStorage.setItem('formData', name);
+    });
+  }
+}
+```
+
+Something to be aware when accessing state with the Vue Composition API is that when using a `ref`, you need to use the `value` of property in order to get the current value or make modifications. An alternative would be to use the `reactive` function, that works this way:
+```js
+const state = reactive({name: "Mary"});
+watch(() => {
+  console.log("Current name: ", state.name);
+});
+```
+
+Here, we can access and mutate the `name` state like we would usually do with a JavaScript object. It's important to note that **we can't destructure the returned object from the `reactive` call, if we do so we lose the reactivity.
+
+## How to track dependencies
+
+The `useEffect` Hook in React, allows us to run certain side effect (like making a subscription, data fetching or using Web APIs such as storage) after each render and to optionally run some cleanup before the next execution of the callback or when the component will unmount. By default, all `useEffect` registered functions will run after each render but we can define the actual state and props dependencies so that React skips the execution of our `useEffect` hook if the relevant state didn't change (e.g. a render was made because of another state). Going back to our previous `Form` example we can pass an array of dependencies as the second argument of the `useEffect` hook:
+```js{4-6}
+function Form() {
+  const [name, setName] = useState('Mary');
+  const [surname, setSurname] = useState('Poppins');
+  useEffect(function persistForm() {
+      localStorage.setItem('formData', name);
+  }, [name]);
+
+  // ...
+}
+```
+This way, only when `name` changes we will update the browser `localStorage`. A common source of bugs with React Hooks is forgetting to exhaustively declare all of our dependencies in the dependency array, fortunately the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) include a linting rule that warns about missing dependencies.
+
+`useCallback` and `useMemo` also use the array of dependencies argument to decide if they should return the memoized version of the callback or value respectively than before.
+
+In the case of Vue Composition API, we can use the `watch` function to perform side effects in response of props or state changes. Thanks to the reactivity system of Vue the dependencies will be automatically tracked and the registered function will be called reactively when the dependencies changed. Going back to our example:
+```js{5-7}
+export default {
+  setup() {
+    const name = ref("Mary");
+    const lastName = ref("Poppins");
+    watch(function persistForm() => {
+      localStorage.setItem('formData', name.value);
+    });
+  }
+}
+```
+
+After the first time our watcher runs, `name` will be tracked as a dependency and when it mutates at a later time, the watcher will run again.
