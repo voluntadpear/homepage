@@ -108,7 +108,7 @@ function Form() {
 ```
 This way, only when `name` changes we will update the browser `localStorage`. A common source of bugs with React Hooks is forgetting to exhaustively declare all of our dependencies in the dependency array, fortunately the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) include a linting rule that warns about missing dependencies.
 
-`useCallback` and `useMemo` also use the array of dependencies argument to decide if they should return the memoized version of the callback or value respectively than before.
+`useCallback` and `useMemo` also use an array of dependencies argument to decide if they should return the same memoized version of the callback or value respectively than the last execution or not.
 
 In the case of Vue Composition API, we can use the `watch` function to perform side effects in response of props or state changes. Thanks to the reactivity system of Vue the dependencies will be automatically tracked and the registered function will be called reactively when the dependencies changed. Going back to our example:
 ```js{5-7}
@@ -124,3 +124,25 @@ export default {
 ```
 
 After the first time our watcher runs, `name` will be tracked as a dependency and when it mutates at a later time, the watcher will run again.
+
+## Access to the lifecycle of the component
+
+Hooks represent a complete switch of mental model when dealing with lifecycle, side effects and state management of your React component. Ryan Florence, an active member of the React community, [expressed that there is a mental shift to be made from class components into hooks](https://twitter.com/ryanflorence/status/1125041041063665666), and as React docs point out:
+> If you’re familiar with React class lifecycle methods, you can think of `useEffect` Hook as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` combined.
+
+The goal of React Hooks are to allow us to split the code based on what it is doing rather than what lifecycle it is part of.
+
+Vue Component API in the other hand, still gives us access to [lifecycle hooks](https://vue-composition-api-rfc.netlify.com/api.html#lifecycle-hooks) (the equivalent name that lifecycle methods get in the Vue world) with `onMounted`, `onUpdated` and `onBeforeUnmount`, etc.
+```js
+setup() {
+  const name = ref("Mary");
+  onMounted(() => {
+    console.log(`Component was mounted with name: ${name}`); 
+  });
+  onBeforeUnmount(() => {
+    console.log(`Component will unmount with name: ${name}`);
+  });
+}
+```
+
+## Custom code
