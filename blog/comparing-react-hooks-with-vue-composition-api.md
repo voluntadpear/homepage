@@ -130,17 +130,24 @@ After the first time our watcher runs, `name` will be tracked as a dependency an
 Hooks represent a complete switch of mental model when dealing with lifecycle, side effects and state management of your React component. Ryan Florence, an active member of the React community, [expressed that there is a mental shift to be made from class components into hooks](https://twitter.com/ryanflorence/status/1125041041063665666), and as React docs point out:
 > If you’re familiar with React class lifecycle methods, you can think of `useEffect` Hook as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` combined.
 
-The goal of React Hooks are to allow us to split the code based on what it is doing rather than what lifecycle it is part of.
+The goal of React Hooks are to allow us to split the code based on what it is doing rather than what lifecycle it is part of. It is possible however, to control when `useEffect` will run:
+```js
+useEffect(() => {
+  console.log("This will only run after initial render.");
+  return () => { console.log("This will only run when component will unmount."); };
+}, []);
+```
 
-Vue Component API in the other hand, still gives us access to [lifecycle hooks](https://vue-composition-api-rfc.netlify.com/api.html#lifecycle-hooks) (the equivalent name that lifecycle methods get in the Vue world) with `onMounted`, `onUpdated` and `onBeforeUnmount`, etc.
+But once again, it's more idiomatic when using React Hooks to stop thinking in terms of lifecycle methods but to think about what state our effects depend on.
+
+Vue Component API in the other hand, still gives us access to [lifecycle hooks](https://vue-composition-api-rfc.netlify.com/api.html#lifecycle-hooks) (the equivalent name that lifecycle methods get in the Vue world) with `onMounted`, `onUpdated` and `onBeforeUnmount`, etc:
 ```js
 setup() {
-  const name = ref("Mary");
   onMounted(() => {
-    console.log(`Component was mounted with name: ${name}`); 
+    console.log(`This will only run after initial render.`); 
   });
   onBeforeUnmount(() => {
-    console.log(`Component will unmount with name: ${name}`);
+    console.log(`This will only run when component will unmount.`);
   });
 }
 ```
