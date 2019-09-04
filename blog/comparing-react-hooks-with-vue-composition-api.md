@@ -4,6 +4,8 @@ date: 2019-08-21T22:42:19.319Z
 title: Comparing React Hooks with Vue Composition API
 summary: What are their similarities and differences?
 ---
+**Note: The Vue Composition API is a work in progress and is subject to future changes. Nothing regarding Composition API is 100% sure until Vue 3.0 arrives**
+
 React presents [Hooks](https://reactjs.org/docs/hooks-intro.html) as an alternative to [classes extending React.Component](https://reactjs.org/docs/react-component.html) for writing components. They have received an overwhelming positive reaction from the community, since for a long time there has been a steep learning curve for adopting classes and situations like starting a new component as a stateless function and realizing later we need state and having to refactor the whole component as a `class`.
 
 Vue recently presented the [Vue Composition API RFC](https://vue-composition-api-rfc.netlify.com), a new API for writing Vue components inspired by React Hooks but with many interesting differences that I will discuss in this post. This RFC has a really controversial story, since it started with [a previous version called Functio-based Component API](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md) that received [lots of criticism](https://github.com/vuejs/rfcs/pull/42) from certain part of the community, based on the fear of Vue starting to be more complicated and less like the simple library that people liked in the first place.
@@ -39,7 +41,7 @@ function Form() {
 }
 ```
 
-React interally keeps track of all the hooks we are using in our component. In this example we are using four hooks. But notice how the first `useEffect` invocation is done conditionally, and since on the first render the `name` state variable will be assigned the default value of `'Mary'`, React will know that it needs to keep track of all of these four hooks in order. What happens if on another render the `name` state is empty? Well, if that's the case React won't know what to return on the second `useState` hook call. To avoid this and other issues, there is an [ESLint plugin](https://www.npmjs.com/package/eslint-plugin-react-hooks) that is strongly recommended when working with React Hooks and is included by default with Create React App.
+React internally keeps track of all the hooks we are using in our component. In this example we are using four hooks. But notice how the first `useEffect` invocation is done conditionally, and since on the first render the `name` state variable will be assigned the default value of `'Mary'`, React will know that it needs to keep track of all of these four hooks in order. What happens if on another render the `name` state is empty? Well, if that's the case React won't know what to return on the second `useState` hook call. To avoid this and other issues, there is an [ESLint plugin](https://www.npmjs.com/package/eslint-plugin-react-hooks) that is strongly recommended when working with React Hooks and is included by default with Create React App.
 
 Going back to Vue, something equivalent to the previous example would be this:
 ```js
@@ -91,6 +93,8 @@ watch(() => {
 ```
 
 Here, we can access and mutate the `name` state like we would usually do with a JavaScript object. It's important to note that **we can't destructure the returned object from the `reactive` call, if we do so we lose the reactivity.
+
+## Declaring state
 
 ## How to track dependencies
 
@@ -153,3 +157,42 @@ setup() {
 ```
 
 ## Custom code
+One aspect that the React Team wanted to focus with Hooks is to provide developers with a nicer way of writing reusable code than previous alternatives adopted by the community, like [Higher-Order Components](https://reactjs.org/docs/higher-order-components.html) or [Render Props](https://reactjs.org/docs/render-props.html). [Custom Hooks](https://reactjs.org/docs/hooks-custom.html) are the answer they came up with.
+
+Custom Hooks are just regular JavaScript functions that make use of React Hooks inside of it. One convention they follow is that their name should start with `use` so that people can tell at a glance that it is meant to be used as a hook.
+```js
+export function useDebugState(label, initialValue) {
+  const [value, setValue] = useState(initialValue);
+  useEffect(() => {
+    console.log(`${label}: `, value);
+  }, [label, value]);
+  return [value, setValue];
+}
+```
+
+This tiny example Custom Hook can be used as a replacement of `useState` while logging to the console when the value changes:
+```js
+const [name, setName] = useDebugState("Name", "Mary");
+```
+
+In Vue, Composition Functions are the equivalent of Hooks with the same set of logic extraction and reusability goals. As a matter of fact, we can have a really similar `useDebugState` composition function in Vue:
+```js
+export function useDebugState(label, initialValue) {
+  const state = ref(initialValue);
+  watch(() => {
+    console.log(`${label}: `, state.value);
+  });
+  return state;
+}
+
+// elsewhere:
+const name = useDebugState("Name", "Mary");
+```
+
+*Note: By convention composition functions also use `use` as a prefix like React Hooks to make it clear it's a composition function and that it belongs in `setup`*
+
+One cool possibility that Custom Hooks and Composition Functions unlocks for us is the possibility to organize our code by features. So if you have some state and effects that are relevant to one feature of your component, you can extract those into their own functions and keep your components clean.
+
+## Refs
+
+## Additional functions
