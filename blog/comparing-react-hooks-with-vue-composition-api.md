@@ -4,16 +4,20 @@ date: 2019-08-21T22:42:19.319Z
 title: Comparing React Hooks with Vue Composition API
 summary: What are their similarities and differences?
 ---
-**Note: The Vue Composition API is a work in progress and is subject to future changes. Nothing regarding Composition API is 100% sure until Vue 3.0 arrives**
+**Note: The Vue Composition API is a work in progress and is subject to future changes. Nothing regarding the Vue Composition API is 100% sure until Vue 3.0 arrives.**
 
-React presents [Hooks](https://reactjs.org/docs/hooks-intro.html) as an alternative to [classes extending React.Component](https://reactjs.org/docs/react-component.html) for writing components. They have received an overwhelming positive reaction from the community, since for a long time there has been a steep learning curve for adopting classes and situations like starting a new component as a stateless function and realizing later we need state and having to refactor the whole component as a `class`.
+React presents [Hooks](https://reactjs.org/docs/hooks-intro.html) as an alternative to [classes extending React.Component](https://reactjs.org/docs/react-component.html) for writing components. They have received an overwhelming positive reaction from the community, since for a long time there has been a steep learning curve for adopting classes, and situations like starting a new component as a stateless function and realizing later we need state and having to refactor the whole component as a `class`.
 
-Vue recently presented the [Vue Composition API RFC](https://vue-composition-api-rfc.netlify.com), a new API for writing Vue components inspired by React Hooks but with many interesting differences that I will discuss in this post. This RFC has a really controversial story, since it started with [a previous version called Functio-based Component API](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md) that received [lots of criticism](https://github.com/vuejs/rfcs/pull/42) from certain part of the community, based on the fear of Vue starting to be more complicated and less like the simple library that people liked in the first place.
+Vue recently presented the [Composition API RFC](https://vue-composition-api-rfc.netlify.com), a new API for writing Vue components inspired by React Hooks but with some interesting differences that I will discuss in this post. This RFC has a really controversial story, since it started with [a previous version called Function-based Component API](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md) that received [lots of criticism](https://github.com/vuejs/rfcs/pull/42) from certain part of the community, based on the fear of Vue starting to be more complicated and less like the simple library that people liked in the first place.
 
-The Vue core team made a great emphasis on assuring the community that this new API won't make the original API (now informally referred as the "Options-based API") disappear, and we will be even be able to [combine both components API](https://vue-composition-api-rfc.netlify.com/#usage-alongside-existing-api) together.
+The Vue core team made a great emphasis on assuring the community that this new API won't make the original API (now informally referred as the "Options-based API") disappear. The current iteration of the proposal allows developers to even [combine both components APIs](https://vue-composition-api-rfc.netlify.com/#usage-alongside-existing-api) together.
 
-## Number of executions of the code
-React hooks allow you to "hook into" React functionalities like the component state and side effects handling. You make use of hooks inside function components so each time the component renders, the hooks are evaluated. This is one of the first differences we can identify between React Hooks and Vue Composition API, **React hooks run each time the component renders while Vue setup function is only executed once**. Because React Hooks can get executed multiple times, there are [certain rules](https://reactjs.org/docs/hooks-rules.html) the render function must follow, one of them being:
+So, let's get started studying the different aspects that characterized React Hooks and the Vue Composition API and walkthrough certain differences that we might find along the way ⏯
+
+## Execution of the code
+React hooks allow you to "hook into" React functionalities like the component state and side effects handling. You make use of hooks inside function components so each time the component renders, the hooks are evaluated. 
+
+The new Vue Composition API is based on a new component option called `setup`. `setup` is called after the `beforeCreate` hook (in Vue, a "hook" is a lifecycle method) and before the `created` hook. This is one of the first differences we can identify between React Hooks and Vue Composition API, **React hooks run each time the component renders while the `setup` function from is only executed once**. Because React Hooks can get executed multiple times, there are [certain rules](https://reactjs.org/docs/hooks-rules.html) the render function must follow, one of them being:
 
 > Don’t call Hooks inside loops, conditions, or nested functions. 
 
@@ -41,7 +45,16 @@ function Form() {
 }
 ```
 
-React internally keeps track of all the hooks we are using in our component. In this example we are using four hooks. But notice how the first `useEffect` invocation is done conditionally, and since on the first render the `name` state variable will be assigned the default value of `'Mary'`, React will know that it needs to keep track of all of these four hooks in order. What happens if on another render the `name` state is empty? Well, if that's the case React won't know what to return on the second `useState` hook call. To avoid this and other issues, there is an [ESLint plugin](https://www.npmjs.com/package/eslint-plugin-react-hooks) that is strongly recommended when working with React Hooks and is included by default with Create React App.
+React internally keeps track of all the hooks we are using in our component. In this example we are using four hooks. But notice how the first `useEffect` invocation is done conditionally, and since on the first render the `name` state variable will be assigned the default value of `'Mary'`, React will know that it needs to keep track of all of these four hooks in order. What happens if on another render the `name` state is empty? Well, in that case React won't know what to return on the second `useState` hook call. To avoid this and other issues, there is an [ESLint plugin](https://www.npmjs.com/package/eslint-plugin-react-hooks) that is strongly recommended when working with React Hooks and is included by default with [Create React App](https://github.com/facebook/create-react-app).
+
+What if we just want to run the effect if `name` is not empty then? Well, we can simply move it inside the `useEffect` callback:
+```js
+useEffect(function persistForm() {
+  if (name !== '') {
+    localStorage.setItem('formData', name);
+  }
+});
+```
 
 Going back to Vue, something equivalent to the previous example would be this:
 ```js
@@ -74,17 +87,9 @@ watch(function persistForm() => {
 });
 ```
 
-This same recommendation is what we need to fix the React example:
-```js
-useEffect(function persistForm() {
-  if (name !== '') {
-      localStorage.setItem('formData', name);
-    });
-  }
-}
-```
+## Declaring state
 
-Something to be aware when accessing state with the Vue Composition API is that when using a `ref`, you need to use the `value` of property in order to get the current value or make modifications. An alternative would be to use the `reactive` function, that works this way:
+Something to be aware of when accessing state with the Vue Composition API is that when using a `ref`, you need to use the `value` of the property in order to get the current value or make modifications. An alternative would be to use the `reactive` function, that works this way:
 ```js
 const state = reactive({name: "Mary"});
 watch(() => {
@@ -93,8 +98,6 @@ watch(() => {
 ```
 
 Here, we can access and mutate the `name` state like we would usually do with a JavaScript object. It's important to note that **we can't destructure the returned object from the `reactive` call, if we do so we lose the reactivity.
-
-## Declaring state
 
 ## How to track dependencies
 
