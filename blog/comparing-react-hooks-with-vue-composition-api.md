@@ -1,5 +1,5 @@
 ---
-path: /blog/test-netlify-cms
+path: /blog/comparison-react-hooks-vue-composition
 date: 2019-08-21T22:42:19.319Z
 title: Comparing React Hooks with Vue Composition API
 summary: What are their similarities and differences?
@@ -277,4 +277,59 @@ const description = computed(() => `${name.value} is ${age.value} years old`);
 
 As usual, remember that refs are containers and the value is accessed through the `value` property ;)
 
-But what happens if computing a value is expensive? you wouldn't want to compute it every time your component renders. React includes the `useMemo` for that. 
+But what happens if calculating a value is expensive? you wouldn't want to compute it every time your component renders. React includes the `useMemo` for that:
+```js{7}
+function fibNaive(n) {
+  if (n <= 1) return n;
+  return fibNaive(n - 1) + fibNaive(n - 2);
+}
+const Fibonacci = () => {
+  const [nth, setNth] = useState(1);
+  const nthFibonacci = useMemo(() => fibNaive(nth), [nth]);
+  return (
+    <section>
+      <label>
+        Number:
+        <input
+          type="number"
+          value={nth}
+          onChange={e => setNth(e.target.value)}
+        />
+      </label>
+      <p>nth Fibonacci number: {nthFibonacci}</p>
+    </section>
+  );
+};
+```
+`useMemo` also expects a dependency array to know when it should compute a new value. **React advice you to use `useMemo` as a performance optimization and not as a guarantee that the value will remain memoized** until a change in any dependency occurs.
+
+Vue's `computed` perform automatic dependency tracking so it doesn't need a dependency array.
+
+`useCallback` is really similar to `useMemo` but is used to memoize callback functions. As a matter of fact `useCallback(fn, deps)` is equivalent to `useMemo(() => fn, deps)`. Due to the nature of Vue Composition API, there is no equivalent to `useCallback`. Any callback in the `setup` function will only be defined once.
+
+## Context and provide/inject
+
+React has the `useContext` hook as a new way to read the current context value for the specified context. The value is determined as usual, being the `value` prop of the closest `<Context.Provider>` component in the ancestors tree. It's equivalent to `static contextType = MyContext` in a class or the `<Context.Consumer>` component.
+```js
+// context object
+const ThemeContext = React.createContext('light');
+
+// provider
+<ThemeContext.Provider value="dark">
+
+// consumer
+const theme = useContext(ThemeContext);
+```
+
+Vue has a similar API called provide/inject. It exists in Vue 2.x as components options but a pair of `provide` and `inject` functions are added as part of the Composition API to be used inside a `setup` function:
+```js
+// key to provide
+const ThemeSymbol = Symbol();
+
+// provider
+provide(ThemeSymbol, ref("dark"));
+
+// consumer
+const value = inject(ThemeSymbol);
+```
+Note that if you want to retain reactivity you must explicitly provide a `ref`/`reactive` as the value.
