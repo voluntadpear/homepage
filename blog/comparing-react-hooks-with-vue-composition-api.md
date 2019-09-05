@@ -197,5 +197,5 @@ const name = useDebugState("Name", "Mary");
 One cool possibility that Custom Hooks and Composition Functions unlocks for us is the possibility to organize our code by features. So if you have some state and effects that are relevant to one feature of your component, you can extract those into their own functions and keep your components clean.
 
 ## Refs
-
+Both React `useRef` and Vue `ref` allows you to reference the component or DOM element that you attach it to.
 ## Additional functions
