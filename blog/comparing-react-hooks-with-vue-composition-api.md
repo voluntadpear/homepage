@@ -197,5 +197,84 @@ const name = useDebugState("Name", "Mary");
 One cool possibility that Custom Hooks and Composition Functions unlocks for us is the possibility to organize our code by features. So if you have some state and effects that are relevant to one feature of your component, you can extract those into their own functions and keep your components clean.
 
 ## Refs
-Both React `useRef` and Vue `ref` allows you to reference the component or DOM element that you attach it to.
+Both React `useRef` and Vue `ref` allow you to reference a child component (in the case of React a Class Component or component wrapped with `React.forwardRef`) or DOM element that you attach it to.
+
+React:
+```js{2,8}
+const MyComponent = () => {
+  const divRef = useRef(null);
+  useEffect(() => {
+    console.log("div: ", divRef.current)
+  }, [divRef]);
+
+  return (
+    <div ref={divRef}>
+      <p>My div</p>
+    </div>
+  )
+}
+```
+
+Vue:
+```js{3,9}
+export default {
+  setup() {
+    const divRef = ref(null);
+    onMounted(() => {
+      console.log("div: ", divRef.value);
+    });
+
+    return () => (
+      <div ref={divRef}>
+        <p>My div</p>
+      </div>
+    )
+  }
+}
+```
+
+*Note that in the case of Vue, template refs with JSX on the render function returned by `setup()` [are not supported](https://github.com/vuejs/composition-api#template-refs) on the `@vue/composition-api` Vue 2.x plugin, but the above syntax will be valid in Vue 3.0 according to the [current RFC](https://vue-composition-api-rfc.netlify.com/api.html#template-refs).
+
+The `useRef` React Hook is not only useful for getting access to DOM elements though, you can use it for any kind of mutable value that you want to keep between renders but aren't part of your state (and thus won't trigger re-renders  when they are mutated). You can think about them as ["instance variables"](https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables) that you would have in a Class Component. Here is an example:
+```js
+const timerRef = useRef(null);
+useEffect(() => {
+  timerRef.current = setInterval(() => {
+    setSecondsPassed(prevSecond => prevSecond + 1);
+  }, 1000);
+  return () => {
+    clearInterval(timerRef.current);
+  };
+}, []);
+
+return (
+  <button
+    onClick={() => {
+      clearInterval(timerRef.current);
+    }}
+  >
+    Stop timer
+  </button>
+)
+```
+
+`ref` has an additional functionality in the Vue Composition API as well, that we have been using heavily in our previous examples: **reactive refs**. As a matter of fact, template refs and reactive refs are unified when using the Composition API. refs allows us to reactively mutate any primitive value and Vue automatically triggers any update on observers of that reference.
+
 ## Additional functions
+Since React hooks run multiple times there's no need to an equivalent to Vue's `computed` function. You are free to declare a variable that contains a value based on state or props:
+```js
+const [name, setName] = useState("Mary");
+const [age, setAge] = useState(25);
+const description = `${name} is ${age} years old`;
+```
+
+In the case of Vue, the `setup` function only runs one. Hence the need to define computed properties, that should observe changes to certain state and update accordingly:
+```js
+const name = ref("Mary");
+const age = ref(25);
+const description = computed(() => `${name.value} is ${age.value} years old`);
+```
+
+As usual, remember that refs are containers and the value is accessed through the `value` property ;)
+
+But what happens if computing a value is expensive? you wouldn't want to compute it every time your component renders. React includes the `useMemo` for that. 
