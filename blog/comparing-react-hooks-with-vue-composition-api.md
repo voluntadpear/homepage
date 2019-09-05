@@ -145,7 +145,7 @@ useEffect(() => {
 }, []);
 ```
 
-But once again, it's more idiomatic when using React Hooks to stop thinking in terms of lifecycle methods but to think about what state our effects depend on.
+But once again, it's more idiomatic when using React Hooks to stop thinking in terms of lifecycle methods but to think about what state our effects depend on. Btw, Rich Harris, the creator of Svelte published [some insightful slides](https://docs.google.com/presentation/d/1PUvpXMBEDS45rd0wHu6tF3j_8wmGC6cOLtOw2hzU-mw) he presented at a NYC React meetup where he explores the compromises React is making in order for enabling new features in the future (e.g. concurrent mode) and how Svelte differs from that. It will help you understand the shift from thinking in components with lifecycle where side effects happen to *side effects being part of the render itself*. Sebastian Markbåge from the React core team, [further expands here](https://gist.github.com/sebmarkbage/a5ef436427437a98408672108df01919) on the direction React is taking and compromises with reactivity systems like Svelte or Vue.
 
 Vue Component API in the other hand, still gives us access to [lifecycle hooks](https://vue-composition-api-rfc.netlify.com/api.html#lifecycle-hooks) (the equivalent name that lifecycle methods get in the Vue world) with `onMounted`, `onUpdated` and `onBeforeUnmount`, etc:
 ```js
@@ -303,9 +303,11 @@ const Fibonacci = () => {
 ```
 `useMemo` also expects a dependency array to know when it should compute a new value. **React advice you to use `useMemo` as a performance optimization and not as a guarantee that the value will remain memoized** until a change in any dependency occurs.
 
+*As a side note: Kent C. Dodds has [a really nice article](https://kentcdodds.com/blog/usememo-and-usecallback) explaining many situations where `useMemo` and `useCallback` aren't really necessary.
+
 Vue's `computed` perform automatic dependency tracking so it doesn't need a dependency array.
 
-`useCallback` is really similar to `useMemo` but is used to memoize callback functions. As a matter of fact `useCallback(fn, deps)` is equivalent to `useMemo(() => fn, deps)`. Due to the nature of Vue Composition API, there is no equivalent to `useCallback`. Any callback in the `setup` function will only be defined once.
+`useCallback` is really similar to `useMemo` but is used to memoize callback functions. As a matter of fact `useCallback(fn, deps)` is equivalent to `useMemo(() => fn, deps)`. The ideal use case of it is when we need to maintain referential equality between renders, e.g. we are passing the callback to an optimized child component that was defined with `React.memo` and we want to avoid it to re-render unnecessarily. Due to the nature of Vue Composition API, there is no equivalent to `useCallback`. Any callback in the `setup` function will only be defined once.
 
 ## Context and provide/inject
 
@@ -333,3 +335,9 @@ provide(ThemeSymbol, ref("dark"));
 const value = inject(ThemeSymbol);
 ```
 Note that if you want to retain reactivity you must explicitly provide a `ref`/`reactive` as the value.
+
+## Conclusion
+
+There couldn't be more exciting times for both frameworks. Since React Hooks were introduced in 2018, the community has been able to build amazing things on top of them and the extensibility of Custom Hooks allowed for [many open source contributions](https://usehooks.com) that can be easily added to our projects. Vue is taking inspiration from React Hooks and adapting them in a way that feels nice for the framework and serves as an example of how all of these different technologies can embrace change and share ideas and solutions. I can't wait for Vue 3 to arrive and see the possibilities that it unlocks.
+
+Thank you for reading and keep building awesome stuff 🚀
