@@ -95,7 +95,7 @@ export default {
 
 Vue Composition API is centered around a new component option called `setup`. It provides a new set of functions for adding state, computed properties, watchers and lifecycle hooks to our Vue components.
 
-This new API won't make the original API (now referred as the "Options-based API") disappear. The current iteration of the proposal allows developers to even [combine both components APIs](https://vue-composition-api-rfc.netlify.com/#usage-alongside-existing-api) together.
+This new API won't make the original API (now referred to as the "Options-based API") disappear. The current iteration of the proposal allows developers to even [combine both components APIs](https://vue-composition-api-rfc.netlify.com/#usage-alongside-existing-api) together.
 
 *Note: you can try this in Vue 2.x using the [@vue/composition-api](https://github.com/vuejs/composition-api) plugin.*
 
@@ -130,7 +130,7 @@ function Form() {
 }
 ```
 
-React internally keeps track of all the hooks we are using in our component. In this example we are using four hooks. Notice how the first `useEffect` invocation is done conditionally, and since on the first render the `name` state variable will be assigned the default value of `'Mary'` the condition will be evaluated to `true` and React will know that it needs to keep track of all of these four hooks in order. But what happens if on another render `name` is empty? Well, in that case React won't know what to return on the second `useState` hook call 😱. To avoid this and other issues, there is an [ESLint plugin](https://www.npmjs.com/package/eslint-plugin-react-hooks) that is strongly recommended when working with React Hooks and is included by default with [Create React App](https://github.com/facebook/create-react-app).
+React internally keeps track of all the hooks we are using in our component. In this example, we are using four hooks. Notice how the first `useEffect` invocation is done conditionally, and since on the first render the `name` state variable will be assigned the default value of `'Mary'` the condition will be evaluated to `true` and React will know that it needs to keep track of all of these four hooks in order. But what happens if on another render `name` is empty? Well, in that case, React won't know what to return on the second `useState` hook call 😱. To avoid this and other issues, there is an [ESLint plugin](https://www.npmjs.com/package/eslint-plugin-react-hooks) that is strongly recommended when working with React Hooks and is included by default with [Create React App](https://github.com/facebook/create-react-app).
 
 What if we just want to run the effect if `name` is not empty then? We can simply move it inside the `useEffect` callback:
 
@@ -185,7 +185,7 @@ const [age, setAge] = useState(25);
 console.log(`${name} is ${age} years old.`);
 ```
 
-It returns an array with the state as the first element and a setter function in second place. Usually you use [Array destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring) to grab them.
+It returns an array with the state as the first element and a setter function in second place. Usually, you use [Array destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring) to grab them.
 
 A handy alternative is using `useReducer` that accept a Redux-like reducer and an initial state in its more usual variant. There's also a variant with [lazy initialization](https://reactjs.org/docs/hooks-reference.html#lazy-initialization):
 
@@ -207,9 +207,9 @@ const [state, dispatch] = useReducer(reducer, initialState);
 
 You can then use the `dispatch` function like `dispatch({type: 'increment'});`.
 
-Vue works in a totally different way due to its reactive nature. You have two main functions to declare state: `ref` and `reactive`.
+Vue works differently due to its reactive nature. You have two main functions to declare state: `ref` and `reactive`.
 
-`ref` returns a reactive object where the inner value it contains is accessed by its `value` property. You can use `ref` with primitive values or objects and in the case of objects they are made deeply reactive.
+`ref` returns a reactive object where the inner value it contains is accessed by its `value` property. You can use `ref` with primitive values or objects and in the case of objects, they are made deeply reactive.
 
 ```js
 const name = ref("Mary");
@@ -219,7 +219,7 @@ watch(() => {
 });
 ```
 
-`reactive` in the other hand can only take an object as its input and returns a reactive proxy of it. Note that the reactivity affects all nested properties.
+`reactive` on the other hand can only take an object as its input and returns a reactive proxy of it. Note that the reactivity affects all nested properties.
 
 ```js
 const state = reactive({
@@ -270,7 +270,7 @@ function Form() {
 }
 ```
 
-This way, only when `name` changes we will update the `localStorage`. A common source of bugs with React Hooks is forgetting to exhaustively declare all of our dependencies in the dependencies array. You can end up with your `useEffect` callback not being updated with the latest dependencies and referring instead to stale values from previous renders. Fortunately the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) includes a lint rule that warns about missing dependencies.
+This way, only when `name` changes we will update the `localStorage`. A common source of bugs with React Hooks is forgetting to exhaustively declare all of our dependencies in the dependencies array. You can end up with your `useEffect` callback not being updated with the latest dependencies and referring instead to stale values from previous renders. Fortunately, the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) includes a lint rule that warns about missing dependencies.
 
 `useCallback` and `useMemo` also use an array of dependencies argument to decide if they should return the same memoized version of the callback or value respectively than the last execution or not.
 
@@ -296,7 +296,7 @@ Hooks represent a complete switch of the mental model when dealing with lifecycl
 
 > If you’re familiar with React class lifecycle methods, you can think of `useEffect` Hook as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` combined.
 
-It is possible however, to control when `useEffect` will run and bringing us closer to the mental model of running side effects in lifecycles:
+It is possible, however, to control when `useEffect` will run and bringing us closer to the mental model of running side effects in lifecycles:
 
 ```js
 useEffect(() => {
@@ -305,7 +305,7 @@ useEffect(() => {
 }, []);
 ```
 
-But once again, it's more idiomatic when using React Hooks to stop thinking in terms of lifecycle methods but to think about what state our effects depend on. By the way, Rich Harris, the creator of Svelte published [some insightful slides](https://docs.google.com/presentation/d/1PUvpXMBEDS45rd0wHu6tF3j_8wmGC6cOLtOw2hzU-mw) he presented at an NYC React meetup where he explores the compromises React is making in order to enable new features in the future (e.g. concurrent mode) and how Svelte differs from that. It will help you understand the shift from thinking in components with lifecycle where side effects happen to _side effects being part of the render itself_. Sebastian Markbåge from the React core team, [further expands here](https://gist.github.com/sebmarkbage/a5ef436427437a98408672108df01919) on the direction React is taking and compromises with reactivity systems like Svelte or Vue.
+But once again, it's more idiomatic when using React Hooks to stop thinking in terms of lifecycle methods but to think about what state our effects depend on. By the way, Rich Harris, the creator of Svelte published [some insightful slides](https://docs.google.com/presentation/d/1PUvpXMBEDS45rd0wHu6tF3j_8wmGC6cOLtOw2hzU-mw) he presented at an NYC React meetup where he explores the compromises React is making to enable new features in the future (e.g. concurrent mode) and how Svelte differs from that. It will help you understand the shift from thinking in components with lifecycle where side effects happen to _side effects being part of the render itself_. Sebastian Markbåge from the React core team, [further expands here](https://gist.github.com/sebmarkbage/a5ef436427437a98408672108df01919) on the direction React is taking and compromises with reactivity systems like Svelte or Vue.
 
 Vue Component API in the other hand, still gives us access to [lifecycle hooks](https://vue-composition-api-rfc.netlify.com/api.html#lifecycle-hooks) (the equivalent name that lifecycle methods get in the Vue world) with `onMounted`, `onUpdated` and `onBeforeUnmount`, etc:
 
@@ -344,7 +344,7 @@ This tiny example Custom Hook can be used as a replacement of `useState` while l
 const [name, setName] = useDebugState("Name", "Mary");
 ```
 
-In Vue, Composition Functions are the equivalent of Hooks with the same set of logic extraction and reusability goals. As a matter of fact, we can have a really similar `useDebugState` composition function in Vue:
+In Vue, Composition Functions are the equivalent of Hooks with the same set of logic extraction and reusability goals. As a matter of fact, we can have a similar `useDebugState` composition function in Vue:
 
 ```js
 export function useDebugState(label, initialValue) {
@@ -403,7 +403,7 @@ export default {
 
 Note that in the case of Vue, allocating template refs with JSX on the render function returned by `setup()` [is not supported](https://github.com/vuejs/composition-api#template-refs) on the `@vue/composition-api` Vue 2.x plugin, but the above syntax will be valid in Vue 3.0 according to the [current RFC](https://vue-composition-api-rfc.netlify.com/api.html#template-refs).
 
-The `useRef` React Hook is not only useful for getting access to DOM elements though. You can use it for any kind of mutable value that you want to keep between renders but aren't part of your state (and thus won't trigger re-renders  when they are mutated). You can think about them as ["instance variables"](https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables) that you would have in a Class Component. Here is an example:
+The `useRef` React Hook is not only useful for getting access to DOM elements though. You can use it for any kind of mutable value that you want to keep between renders but aren't part of your state (and thus won't trigger re-renders when they are mutated). You can think about them as ["instance variables"](https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables) that you would have in a Class Component. Here is an example:
 
 ```js
 const timerRef = useRef(null);
@@ -427,7 +427,7 @@ return (
 )
 ```
 
-And in the Vue Composition API, as we saw in almost all of our examples earlier in this post, `ref` can be used to define reactive state. As a matter of fact, template refs and reactive refs are unified when using the Composition API.
+And in the Vue Composition API, as we saw in almost all of our examples earlier in this post, `ref` can be used to define reactive state. Template refs and reactive refs are unified when using the Composition API.
 
 ## Additional functions
 
@@ -477,15 +477,15 @@ const Fibonacci = () => {
 
 `useMemo` also expects a dependencies array to know when it should compute a new value. **React advice you to use `useMemo` as a performance optimization and not as a guarantee that the value will remain memoized** until a change in any dependency occurs.
 
-*As a side note: Kent C. Dodds has [a really nice article](https://kentcdodds.com/blog/usememo-and-usecallback) explaining many situations where `useMemo` and `useCallback` aren't really necessary.*
+*As a side note: Kent C. Dodds has [a really nice article](https://kentcdodds.com/blog/usememo-and-usecallback) explaining many situations where `useMemo` and `useCallback` aren't necessary.*
 
 Vue's `computed` perform automatic dependency tracking so it doesn't need a dependencies array.
 
-`useCallback` is really similar to `useMemo` but is used to memoize callback functions. As a matter of fact `useCallback(fn, deps)` is equivalent to `useMemo(() => fn, deps)`. The ideal use case of it is when we need to maintain referential equality between renders, e.g. we are passing the callback to an optimized child component that was defined with `React.memo` and we want to avoid it to re-render unnecessarily. Due to the nature of Vue Composition API, there is no equivalent to `useCallback`. Any callback in the `setup` function will only be defined once.
+`useCallback` is similar to `useMemo` but is used to memoize callback functions. As a matter of fact `useCallback(fn, deps)` is equivalent to `useMemo(() => fn, deps)`. The ideal use case of it is when we need to maintain referential equality between renders, e.g. we are passing the callback to an optimized child component that was defined with `React.memo` and we want to avoid it to re-render unnecessarily. Due to the nature of the Vue Composition API, there is no equivalent to `useCallback`. Any callback in the `setup` function will only be defined once.
 
 ## Context and provide/inject
 
-React has the `useContext` hook as a new way to read the current value for the specified context. The value to return is determined as usual, being the `value` prop of the closest `<MyContext.Provider>` component in the ancestors tree. It's equivalent to `static contextType = MyContext` in a class or the `<MyContext.Consumer>` component.
+React has the `useContext` hook as a new way to read the current value for the specified context. The value to return is determined, as usual, as the `value` prop of the closest `<MyContext.Provider>` component in the ancestors tree. It's equivalent to `static contextType = MyContext` in a class or the `<MyContext.Consumer>` component.
 
 ```js
 // context object
@@ -586,6 +586,6 @@ However, templates are way more popular in Vue so exposing an object with values
 
 ## Conclusion
 
-There couldn't be more exciting times for both frameworks. Since the introduction of React Hooks in 2018, the community has built amazing things on top of them and the extensibility of Custom Hooks allowed for [many open source contributions](https://usehooks.com) that can be easily added to our projects. Vue is taking inspiration from React Hooks and adapting them in a way that feels nice for the framework and serves as an example of how all of these different technologies can embrace change and share ideas and solutions. I personally can't wait for Vue 3 to arrive and see the possibilities that it unlocks.
+There couldn't be more exciting times for both frameworks. Since the introduction of React Hooks in 2018, the community has built amazing things on top of them and the extensibility of Custom Hooks allowed for [many open source contributions](https://usehooks.com) that can be easily added to our projects. Vue is taking inspiration from React Hooks and adapting them in a way that feels nice for the framework and serves as an example of how all of these different technologies can embrace change and share ideas and solutions. I can't wait for Vue 3 to arrive and see the possibilities that it unlocks.
 
 Thank you for reading and keep building awesome stuff 🚀
