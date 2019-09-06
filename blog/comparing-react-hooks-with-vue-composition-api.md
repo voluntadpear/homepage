@@ -10,6 +10,10 @@ The Vue core team addressed the confusion around the first RFC and this new one 
 
 **Note: The Vue Composition API is a work in progress and is subject to future changes. Nothing regarding the Vue Composition API is 100% sure until Vue 3.0 arrives.**
 
+React [Hooks](https://reactjs.org/docs/hooks-intro.html) allow you to "hook into" React functionalities like the component state and side effects handling. Hooks can only be used inside function components and allows us to bring state, side-effects handling and much more to our components without the need to create a class for them. The community fell in love with them immediately since [their introduction](https://youtu.be/dpw9EHDh2bM?t=690) in 2018.
+
+The adoption strategy prepared by the React core team was to not deprecate Class Components so you could update the React version, start trying Hooks in new components and keep your existing components without any modification.
+
 So, let's get started studying the different aspects of React Hooks and Vue Composition API and remark certain differences that we might find along the way ⏯
 
 ## React Hooks
@@ -48,9 +52,7 @@ const NoteForm = ({ onNoteSent }) => {
 };
 ```
 
-React [Hooks](https://reactjs.org/docs/hooks-intro.html) allow you to "hook into" React functionalities like the component state and side effects handling. Hooks can only be used inside function components and allows us to bring state, side-effects handling and much more to our components without the need to create a class for them. The community fell in love with them immediately since [their introduction](https://youtu.be/dpw9EHDh2bM?t=690) in 2018.
-
-The adoption strategy prepared by the React core team was to not deprecate Class Components so you could update the React version, start trying Hooks in new components and keep your existing components without any modification.
+`useState` and `useEffect` are some examples of React Hooks. They allow it to add state and run side-effect in function components. There are additional hooks that we will see later and you can even create custom ones. This opens new possibilities for code reusability and extensibility.
 
 ## Vue Composition API
 
