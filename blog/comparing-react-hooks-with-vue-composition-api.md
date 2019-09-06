@@ -4,7 +4,7 @@ date: 2019-08-21T22:42:19.319Z
 title: Comparing React Hooks with Vue Composition API
 summary: What are their similarities and differences?
 ---
-Vue recently presented the [Composition API RFC](https://vue-composition-api-rfc.netlify.com), a new API for writing Vue components inspired by React Hooks but with some interesting differences that I will discuss in this post. This RFC has a really controversial story, since it started with [a previous version called Function-based Component API](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md) that received [lots of criticism](https://github.com/vuejs/rfcs/pull/42) from certain part of the community, based on the fear of Vue starting to be more complicated and less like the simple library that people liked in the first place.
+Vue recently presented the [Composition API RFC](https://vue-composition-api-rfc.netlify.com), a new API for writing Vue components inspired by React Hooks but with some interesting differences that I will discuss in this post. This RFC started with [a previous version called Function-based Component API](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md) that received [lots of criticism](https://github.com/vuejs/rfcs/pull/42) from certain part of the community, based on the fear of Vue starting to be more complicated and less like the simple library that people liked in the first place.
 
 The Vue core team addressed the confusion around the first RFC and this new one presented some interesting adjustments and provided further insights on the motivations behind the proposed changes. If you are interested in giving some feedback to the Vue core team about the new proposal you can participate in [the discussion](https://github.com/vuejs/rfcs/pull/78) on GitHub.
 
@@ -187,7 +187,7 @@ console.log(`${name} is ${age} years old.`);
 
 It returns an array with the state as the first element and a setter function in second place. Usually, you use [Array destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring) to grab them.
 
-A handy alternative is using `useReducer` that accept a Redux-like reducer and an initial state in its more usual variant. There's also a variant with [lazy initialization](https://reactjs.org/docs/hooks-reference.html#lazy-initialization):
+A handy alternative is using `useReducer` that accepts a Redux-like reducer and an initial state in its more usual variant. There's also a variant with [lazy initialization](https://reactjs.org/docs/hooks-reference.html#lazy-initialization):
 
 ```js
 const initialState = {count: 0};
