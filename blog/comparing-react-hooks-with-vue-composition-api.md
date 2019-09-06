@@ -586,6 +586,6 @@ However, templates are way more popular in Vue so exposing an object with values
 
 ## Conclusion
 
-There couldn't be more exciting times for both frameworks. Since the introduction of React Hooks in 2018, the community has built amazing things on top of them and the extensibility of Custom Hooks allowed for [many open source contributions](https://usehooks.com) that can be easily added to our projects. Vue is taking inspiration from React Hooks and adapting them in a way that feels nice for the framework and serves as an example of how all of these different technologies can embrace change and share ideas and solutions. I can't wait for Vue 3 to arrive and see the possibilities that it unlocks.
+These are exciting times for both frameworks. Since the introduction of React Hooks in 2018, the community has built amazing things on top of them and the extensibility of Custom Hooks allowed for [many open source contributions](https://usehooks.com) that can be easily added to our projects. Vue is taking inspiration from React Hooks and adapting them in a way that feels nice for the framework and serves as an example of how all of these different technologies can embrace change and share ideas and solutions. I can't wait for Vue 3 to arrive and see the possibilities that it unlocks.
 
 Thank you for reading and keep building awesome stuff 🚀
