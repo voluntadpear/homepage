@@ -1,0 +1,593 @@
+---
+path: /blog/comparison-react-hooks-vue-composition
+date: 2019-08-21T22:42:19.319Z
+title: Comparing React Hooks with Vue Composition API
+summary: What are their similarities and differences?
+---
+Vue recently presented the [Composition API RFC](https://vue-composition-api-rfc.netlify.com), a new API for writing Vue components inspired by React Hooks but with some interesting differences that I will discuss in this post. This RFC started with [a previous version called Function-based Component API](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md) that received [lots of criticism](https://github.com/vuejs/rfcs/pull/42) from certain part of the community, based on the fear of Vue starting to be more complicated and less like the simple library that people liked in the first place.
+
+The Vue core team addressed the confusion around the first RFC and this new one presented some interesting adjustments and provided further insights on the motivations behind the proposed changes. If you are interested in giving some feedback to the Vue core team about the new proposal you can participate in [the discussion](https://github.com/vuejs/rfcs/pull/78) on GitHub.
+
+**Note: The Vue Composition API is a work in progress and is subject to future changes. Nothing regarding the Vue Composition API is 100% sure until Vue 3.0 arrives.**
+
+React [Hooks](https://reactjs.org/docs/hooks-intro.html) allow you to "hook into" React functionalities like the component state and side effects handling. Hooks can only be used inside function components and allows us to bring state, side-effects handling and much more to our components without the need to create a class for them. The community fell in love with them immediately since [their introduction](https://youtu.be/dpw9EHDh2bM?t=690) in 2018.
+
+The adoption strategy prepared by the React core team was to not deprecate Class Components so you could update the React version, start trying Hooks in new components and keep your existing components without any modification.
+
+So, let's get started studying the different aspects of React Hooks and Vue Composition API and remark certain differences that we might find along the way ⏯
+
+## React Hooks
+
+Example:
+```js
+import React, { useState, useEffect } from "react";
+
+const NoteForm = ({ onNoteSent }) => {
+  const [currentNote, setCurrentNote] = useState("");
+  useEffect(() => {
+    console.log(`Current note: ${currentNote}`);
+  });
+  return (
+    <form
+      onSubmit={e => {
+        onNoteSent(currentNote);
+        setCurrentNote("");
+        e.preventDefault();
+      }}
+    >
+      <label>
+        <span>Note: </span>
+        <input
+          value={currentNote}
+          onChange={e => {
+            const val = e.target.value && e.target.value.toUpperCase()[0];
+            const validNotes = ["A", "B", "C", "D", "E", "F", "G"];
+            setCurrentNote(validNotes.includes(val) ? val : "");
+          }}
+        />
+      </label>
+      <button type="submit">Send</button>
+    </form>
+  );
+};
+```
+
+`useState` and `useEffect` are some examples of React Hooks. They allow it to add state and run side-effect in function components. There are additional hooks that we will see later and you can even create custom ones. This opens new possibilities for code reusability and extensibility.
+
+## Vue Composition API
+
+Example:
+```vue
+<template>
+  <form @submit="handleSubmit">
+    <label>
+      <span>Note:</span>
+      <input v-model="currentNote" @input="handleNoteInput">
+    </label>
+    <button type="submit">Send</button>
+  </form>
+</template>
+
+<script>
+import { ref, watch } from "vue";
+export default {
+  props: ["divRef"],
+  setup(props, context) {
+    const currentNote = ref("");
+    const handleNoteInput = e => {
+      const val = e.target.value && e.target.value.toUpperCase()[0];
+      const validNotes = ["A", "B", "C", "D", "E", "F", "G"];
+      currentNote.value = validNotes.includes(val) ? val : "";
+    };
+    const handleSubmit = e => {
+      context.emit("note-sent", currentNote.value);
+      currentNote.value = "";
+      e.preventDefault();
+    };
+
+    return {
+      currentNote,
+      handleNoteInput,
+      handleSubmit,
+    };
+  }
+};
+</script>
+```
+
+Vue Composition API is centered around a new component option called `setup`. It provides a new set of functions for adding state, computed properties, watchers and lifecycle hooks to our Vue components.
+
+This new API won't make the original API (now referred to as the "Options-based API") disappear. The current iteration of the proposal allows developers to even [combine both components APIs](https://vue-composition-api-rfc.netlify.com/#usage-alongside-existing-api) together.
+
+*Note: you can try this in Vue 2.x using the [@vue/composition-api](https://github.com/vuejs/composition-api) plugin.*
+
+## Execution of the code
+
+The `setup` function of the Vue Composition API is called after the `beforeCreate` hook (in Vue, a "hook" is a lifecycle method) and before the `created` hook. This is one of the first differences we can identify between React Hooks and Vue Composition API, **React hooks run each time the component renders while the Vue `setup` function only runs once while creating the component**. Because React Hooks can run multiple times, there are [certain rules](https://reactjs.org/docs/hooks-rules.html) the render function must follow, one of them being:
+
+> Don’t call Hooks inside loops, conditions, or nested functions. 
+
+Here is a code example straight from React docs that demonstrates this:
+
+```js{6-10}
+function Form() {
+  // 1. Use the name state variable
+  const [name, setName] = useState('Mary');
+
+  // 2. Use an effect for persisting the form
+  if (name !== '') {
+    useEffect(function persistForm() {
+      localStorage.setItem('formData', name);
+    });
+  }
+  // 3. Use the surname state variable
+  const [surname, setSurname] = useState('Poppins');
+
+  // 4. Use an effect for updating the title
+  useEffect(function updateTitle() {
+    document.title = `${name} ${surname}`;
+  });
+
+  // ...
+}
+```
+
+React internally keeps track of all the hooks we are using in our component. In this example, we are using four hooks. Notice how the first `useEffect` invocation is done conditionally, and since on the first render the `name` state variable will be assigned the default value of `'Mary'` the condition will be evaluated to `true` and React will know that it needs to keep track of all of these four hooks in order. But what happens if on another render `name` is empty? Well, in that case, React won't know what to return on the second `useState` hook call 😱. To avoid this and other issues, there is an [ESLint plugin](https://www.npmjs.com/package/eslint-plugin-react-hooks) that is strongly recommended when working with React Hooks and is included by default with [Create React App](https://github.com/facebook/create-react-app).
+
+What if we just want to run the effect if `name` is not empty then? We can simply move it inside the `useEffect` callback:
+
+```js
+useEffect(function persistForm() {
+  if (name !== '') {
+    localStorage.setItem('formData', name);
+  }
+});
+```
+
+Going back to Vue, something equivalent to the previous example would be this:
+
+```js
+export default {
+  setup() {
+    // 1. Use the name state variable
+    const name = ref("Mary");
+    // 2. Use a watcher for persisting the form
+    if(name.value !== '') {
+      watch(function persistForm() => {
+        localStorage.setItem('formData', name.value);
+      });
+    }
+   // 3. Use the surname state variable
+   const surname = ref("Poppins");
+   // 4. Use a watcher for updating the title
+   watch(function updateTitle() {
+     document.title = `${name.value} ${surname.value}`;
+   });
+  }
+}
+```
+
+Since the `setup` method will only run once, we can make use of the different functions that are part of the Composition API (`reactive`, `ref`, `computed`, `watch`, lifecycle hooks, etc.) as part of loops or conditional statements. However, the `if` statement will also only run once, so it won't react to changes to `name` unless we include it inside of the `watch` callback:
+
+```js
+watch(function persistForm() => {
+  if(name.value !== '') {
+    localStorage.setItem('formData', name.value);
+  }
+});
+```
+
+## Declaring state
+
+`useState` is the main way to declare state with React Hooks. You can pass the initial value as an argument to the call and if the computation of the initial state is expensive you can express it as a function that will only be executed during the initial render.
+
+```js
+const [name, setName] = useState("Mary");
+const [age, setAge] = useState(25);
+console.log(`${name} is ${age} years old.`);
+```
+
+It returns an array with the state as the first element and a setter function in second place. Usually, you use [Array destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring) to grab them.
+
+A handy alternative is using `useReducer` that accepts a Redux-like reducer and an initial state in its more usual variant. There's also a variant with [lazy initialization](https://reactjs.org/docs/hooks-reference.html#lazy-initialization):
+
+```js
+const initialState = {count: 0};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+You can then use the `dispatch` function like `dispatch({type: 'increment'});`.
+
+Vue works differently due to its reactive nature. You have two main functions to declare state: `ref` and `reactive`.
+
+`ref` returns a reactive object where the inner value it contains is accessed by its `value` property. You can use `ref` with primitive values or objects and in the case of objects, they are made deeply reactive.
+
+```js
+const name = ref("Mary");
+const age = ref(25);
+watch(() => {
+  console.log(`${name.value} is ${age.value} years old.`);
+});
+```
+
+`reactive` on the other hand can only take an object as its input and returns a reactive proxy of it. Note that the reactivity affects all nested properties.
+
+```js
+const state = reactive({
+  name: "Mary",
+  age: 25,
+});
+watch(() => {
+  console.log(`${state.name} is ${state.age} years old.`);
+});
+```
+
+The RFC has a [whole section](https://vue-composition-api-rfc.netlify.com/#ref-vs-reactive) comparing `ref` and `reactive`. It ends up with a summary of possible approaches for using them:
+
+> 1. Use ref and reactive just like how you'd declare primitive type variables and object variables in normal JavaScript. It is recommended to use a type system with IDE support when using this style.
+>
+> 2. Use reactive whenever you can, and remember to use toRefs when returning reactive objects from composition functions. This reduces the mental overhead of refs but does not eliminate the need to be familiar with the concept.
+
+Something to keep in mind when using `ref` is that you need to remember to access the contained value by the `value` property of the ref (except in templates, where Vue allows you to omit it). Whereas with `reactive` you will lose reactivity if you destructure the object. So you need to have a reference to the object and access the state properties you defined through it.
+
+The Composition API provides two helper functions for dealing with refs and reactive objects. `isRef` can be used to conditionally grab the `value` property if needed (e.g. `isRef(myVar) ? myVar.value : myVar`) and `toRefs` converts a reactive object to a plain object where all of its properties are automatically transform to refs. Particularly useful when returning from custom composition functions (and thus allowing destructuring to be used from the caller side and keep reactivity).
+
+```js
+function useFeatureX() {
+  const state = reactive({
+    foo: 1,
+    bar: 2
+  })
+
+  return toRefs(state)
+}
+
+const {foo, bar} = useFeatureX();
+```
+
+## How to track dependencies
+
+The `useEffect` Hook in React allows us to run certain side effect (like making a subscription, data fetching or using Web APIs such as storage) after each render and to optionally run some cleanup before the next execution of the callback or when the component will unmount. By default, all `useEffect` registered functions will run after each render but we can define the actual state and props dependencies so that React skips the execution of a certain `useEffect` hook if the relevant dependencies haven't changed (e.g. a render was made because of another piece of state update). Going back to our previous `Form` example we can pass an array of dependencies as the second argument of the `useEffect` hook:
+
+```js{4-6}
+function Form() {
+  const [name, setName] = useState('Mary');
+  const [surname, setSurname] = useState('Poppins');
+  useEffect(function persistForm() {
+      localStorage.setItem('formData', name);
+  }, [name]);
+
+  // ...
+}
+```
+
+This way, only when `name` changes we will update the `localStorage`. A common source of bugs with React Hooks is forgetting to exhaustively declare all of our dependencies in the dependencies array. You can end up with your `useEffect` callback not being updated with the latest dependencies and referring instead to stale values from previous renders. Fortunately, the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) includes a lint rule that warns about missing dependencies.
+
+`useCallback` and `useMemo` also use an array of dependencies argument to decide if they should return the same memoized version of the callback or value respectively than the last execution or not.
+
+In the case of Vue Composition API, we can use the `watch` function to perform side effects in response to props or state changes. Thanks to the reactivity system of Vue the dependencies will be automatically tracked and the registered function will be called reactively when the dependencies change. Going back to our example:
+
+```js{5-7}
+export default {
+  setup() {
+    const name = ref("Mary");
+    const lastName = ref("Poppins");
+    watch(function persistForm() => {
+      localStorage.setItem('formData', name.value);
+    });
+  }
+}
+```
+
+After the first time our watcher runs, `name` will be tracked as a dependency and when its value changes at a later time, the watcher will run again.
+
+## Access to the lifecycle of the component
+
+Hooks represent a complete switch of the mental model when dealing with lifecycle, side effects and state management of your React component. Ryan Florence, an active member of the React community, [expressed that there is a mental shift to be made from class components into hooks](https://twitter.com/ryanflorence/status/1125041041063665666), and as the React docs point out:
+
+> If you’re familiar with React class lifecycle methods, you can think of `useEffect` Hook as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` combined.
+
+It is possible, however, to control when `useEffect` will run and bringing us closer to the mental model of running side effects in lifecycles:
+
+```js
+useEffect(() => {
+  console.log("This will only run after initial render.");
+  return () => { console.log("This will only run when component will unmount."); };
+}, []);
+```
+
+But once again, it's more idiomatic when using React Hooks to stop thinking in terms of lifecycle methods but to think about what state our effects depend on. By the way, Rich Harris, the creator of Svelte published [some insightful slides](https://docs.google.com/presentation/d/1PUvpXMBEDS45rd0wHu6tF3j_8wmGC6cOLtOw2hzU-mw) he presented at an NYC React meetup where he explores the compromises React is making to enable new features in the future (e.g. concurrent mode) and how Svelte differs from that. It will help you understand the shift from thinking in components with lifecycle where side effects happen to _side effects being part of the render itself_. Sebastian Markbåge from the React core team, [further expands here](https://gist.github.com/sebmarkbage/a5ef436427437a98408672108df01919) on the direction React is taking and compromises with reactivity systems like Svelte or Vue.
+
+Vue Component API in the other hand, still gives us access to [lifecycle hooks](https://vue-composition-api-rfc.netlify.com/api.html#lifecycle-hooks) (the equivalent name that lifecycle methods get in the Vue world) with `onMounted`, `onUpdated` and `onBeforeUnmount`, etc:
+
+```js
+setup() {
+  onMounted(() => {
+    console.log(`This will only run after initial render.`); 
+  });
+  onBeforeUnmount(() => {
+    console.log(`This will only run when component will unmount.`);
+  });
+}
+```
+
+So in the case of Vue the mental model shift is rather one of stop thinking of organizing the code by which component options (`data`, `computed`, `watch`, `methods`, lifecycle hooks, etc.) they belong to, towards one where you can have different functions each dealing with a specific feature. The RFC includes a [thorough example and comparison](https://vue-composition-api-rfc.netlify.com/#code-organization) of organizing by options vs. organizing by logical concerns. React Hooks also have this benefit and is something that was also [well received by the community](https://twitter.com/prchdk/status/1056960391543062528)   from the ground up.
+
+## Custom code
+
+One aspect that the React Team wanted to focus with Hooks is to provide developers with a nicer way of writing reusable code than previous alternatives adopted by the community, like [Higher-Order Components](https://reactjs.org/docs/higher-order-components.html) or [Render Props](https://reactjs.org/docs/render-props.html). [Custom Hooks](https://reactjs.org/docs/hooks-custom.html) are the answer they came up with.
+
+Custom Hooks are just regular JavaScript functions that make use of React Hooks inside of it. One convention they follow is that their name should start with `use` so that people can tell at a glance that it is meant to be used as a hook.
+
+```js
+export function useDebugState(label, initialValue) {
+  const [value, setValue] = useState(initialValue);
+  useEffect(() => {
+    console.log(`${label}: `, value);
+  }, [label, value]);
+  return [value, setValue];
+}
+```
+
+This tiny example Custom Hook can be used as a replacement of `useState` while logging to the console when the value changes:
+
+```js
+const [name, setName] = useDebugState("Name", "Mary");
+```
+
+In Vue, Composition Functions are the equivalent of Hooks with the same set of logic extraction and reusability goals. As a matter of fact, we can have a similar `useDebugState` composition function in Vue:
+
+```js
+export function useDebugState(label, initialValue) {
+  const state = ref(initialValue);
+  watch(() => {
+    console.log(`${label}: `, state.value);
+  });
+  return state;
+}
+
+// elsewhere:
+const name = useDebugState("Name", "Mary");
+```
+
+_Note: By convention composition functions also use `use` as a prefix like React Hooks to make it clear it's a composition function and that it belongs in `setup`_
+
+## Refs
+
+Both React `useRef` and Vue `ref` allow you to reference a child component (in the case of React a Class Component or component wrapped with `React.forwardRef`) or DOM element that you attach it to.
+
+React:
+
+```js{2,8}
+const MyComponent = () => {
+  const divRef = useRef(null);
+  useEffect(() => {
+    console.log("div: ", divRef.current)
+  }, [divRef]);
+
+  return (
+    <div ref={divRef}>
+      <p>My div</p>
+    </div>
+  )
+}
+```
+
+Vue:
+
+```js{3,9}
+export default {
+  setup() {
+    const divRef = ref(null);
+    onMounted(() => {
+      console.log("div: ", divRef.value);
+    });
+
+    return () => (
+      <div ref={divRef}>
+        <p>My div</p>
+      </div>
+    )
+  }
+}
+```
+
+Note that in the case of Vue, allocating template refs with JSX on the render function returned by `setup()` [is not supported](https://github.com/vuejs/composition-api#template-refs) on the `@vue/composition-api` Vue 2.x plugin, but the above syntax will be valid in Vue 3.0 according to the [current RFC](https://vue-composition-api-rfc.netlify.com/api.html#template-refs).
+
+The `useRef` React Hook is not only useful for getting access to DOM elements though. You can use it for any kind of mutable value that you want to keep between renders but aren't part of your state (and thus won't trigger re-renders when they are mutated). You can think about them as ["instance variables"](https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables) that you would have in a Class Component. Here is an example:
+
+```js
+const timerRef = useRef(null);
+useEffect(() => {
+  timerRef.current = setInterval(() => {
+    setSecondsPassed(prevSecond => prevSecond + 1);
+  }, 1000);
+  return () => {
+    clearInterval(timerRef.current);
+  };
+}, []);
+
+return (
+  <button
+    onClick={() => {
+      clearInterval(timerRef.current);
+    }}
+  >
+    Stop timer
+  </button>
+)
+```
+
+And in the Vue Composition API, as we saw in almost all of our examples earlier in this post, `ref` can be used to define reactive state. Template refs and reactive refs are unified when using the Composition API.
+
+## Additional functions
+
+Since React Hooks run on each render there's no need to an equivalent to the `computed` function from Vue. You are free to declare a variable that contains a value based on state or props and it will point to the latest value on each render:
+
+```js
+const [name, setName] = useState("Mary");
+const [age, setAge] = useState(25);
+const description = `${name} is ${age} years old`;
+```
+
+In the case of Vue, the `setup` function only runs one. Hence the need to define computed properties, that should observe changes to certain state and update accordingly (but only when one of their dependencies change):
+
+```js
+const name = ref("Mary");
+const age = ref(25);
+const description = computed(() => `${name.value} is ${age.value} years old`);
+```
+
+As usual, remember that refs are containers and the value is accessed through the `value` property ;)
+
+But what happens if calculating a value is expensive? you wouldn't want to compute it every time your component renders. React includes the `useMemo` hook for that:
+
+```js{7}
+function fibNaive(n) {
+  if (n <= 1) return n;
+  return fibNaive(n - 1) + fibNaive(n - 2);
+}
+const Fibonacci = () => {
+  const [nth, setNth] = useState(1);
+  const nthFibonacci = useMemo(() => fibNaive(nth), [nth]);
+  return (
+    <section>
+      <label>
+        Number:
+        <input
+          type="number"
+          value={nth}
+          onChange={e => setNth(e.target.value)}
+        />
+      </label>
+      <p>nth Fibonacci number: {nthFibonacci}</p>
+    </section>
+  );
+};
+```
+
+`useMemo` also expects a dependencies array to know when it should compute a new value. **React advice you to use `useMemo` as a performance optimization and not as a guarantee that the value will remain memoized** until a change in any dependency occurs.
+
+*As a side note: Kent C. Dodds has [a really nice article](https://kentcdodds.com/blog/usememo-and-usecallback) explaining many situations where `useMemo` and `useCallback` aren't necessary.*
+
+Vue's `computed` perform automatic dependency tracking so it doesn't need a dependencies array.
+
+`useCallback` is similar to `useMemo` but is used to memoize callback functions. As a matter of fact `useCallback(fn, deps)` is equivalent to `useMemo(() => fn, deps)`. The ideal use case of it is when we need to maintain referential equality between renders, e.g. we are passing the callback to an optimized child component that was defined with `React.memo` and we want to avoid it to re-render unnecessarily. Due to the nature of the Vue Composition API, there is no equivalent to `useCallback`. Any callback in the `setup` function will only be defined once.
+
+## Context and provide/inject
+
+React has the `useContext` hook as a new way to read the current value for the specified context. The value to return is determined, as usual, as the `value` prop of the closest `<MyContext.Provider>` component in the ancestors tree. It's equivalent to `static contextType = MyContext` in a class or the `<MyContext.Consumer>` component.
+
+```js
+// context object
+const ThemeContext = React.createContext('light');
+
+// provider
+<ThemeContext.Provider value="dark">
+
+// consumer
+const theme = useContext(ThemeContext);
+```
+
+Vue has a similar API called provide/inject. It exists in Vue 2.x as components options but a pair of `provide` and `inject` functions are added as part of the Composition API to be used inside a `setup` function:
+
+```js
+// key to provide
+const ThemeSymbol = Symbol();
+
+// provider
+provide(ThemeSymbol, ref("dark"));
+
+// consumer
+const value = inject(ThemeSymbol);
+```
+
+Note that if you want to retain reactivity you must explicitly provide a `ref`/`reactive` as the value.
+
+## Exposing values to render context
+In the case of React since all of your Hooks code is on the component definition and you return the React elements that you would like to render in the same function, you have full access to any value in the scope as you would in any JavaScript code:
+```js
+const Fibonacci = () => {
+  const [nth, setNth] = useState(1);
+  const nthFibonacci = useMemo(() => fibNaive(nth), [nth]);
+  return (
+    <section>
+      <label>
+        Number:
+        <input
+          type="number"
+          value={nth}
+          onChange={e => setNth(e.target.value)}
+        />
+      </label>
+      <p>nth Fibonacci number: {nthFibonacci}</p>
+    </section>
+  );
+};
+```
+
+In the case of Vue if you have your template defined in the `template` or `render` options or if you are using Single File Components you need to return an object from the `setup` function containing every value that you want to expose to the template. Your return statement can potentially end up being verbose since you could potentially want to expose many values and this is a point to be aware of as [mentioned in the RFC](https://vue-composition-api-rfc.netlify.com/#verbosity-of-the-return-statement):
+```js{18}
+<template>
+  <section>
+    <label>
+      Number:
+      <input
+        type="number"
+        v-model="nth"
+      />
+    </label>
+    <p>nth Fibonacci number: {{nthFibonacci}}</p>
+  </section>
+</template>
+<script>
+export default {
+  setup() {
+    const nth = ref(1);
+    const nthFibonacci = computed(() => fibNaive(nth.value));
+    return { nth, nthFibonacci };
+  }
+};
+</script>
+}
+``` 
+
+One way to achieve the same behavior present in React is returning a render function from the `setup` option itself:
+```js
+export default {
+  setup() {
+    const nth = ref(1);
+    const nthFibonacci = computed(() => fibNaive(nth.value));
+    return () => (
+      <section>
+        <label>
+          Number:
+          <input
+            type="number"
+            vModel={nth}
+          />
+        </label>
+        <p>nth Fibonacci number: {nthFibonacci}</p>
+      </section>
+    );
+  }
+};
+```
+However, templates are way more popular in Vue so exposing an object with values is certainly going to be something that you will encounter a lot with Vue Composition API.
+
+## Conclusion
+
+These are exciting times for both frameworks. Since the introduction of React Hooks in 2018, the community has built amazing things on top of them and the extensibility of Custom Hooks allowed for [many open source contributions](https://usehooks.com) that can be easily added to our projects. Vue is taking inspiration from React Hooks and adapting them in a way that feels nice for the framework and serves as an example of how all of these different technologies can embrace change and share ideas and solutions. I can't wait for Vue 3 to arrive and see the possibilities that it unlocks.
+
+Thank you for reading and keep building awesome stuff 🚀
