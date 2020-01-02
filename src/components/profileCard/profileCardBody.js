@@ -3,7 +3,7 @@ import React from "react"
 const ProfileCardBody = () => (
   <React.Fragment>
     <p className="pt-8 text-sm">
-    Hi! I'm a developer who enjoys builiding web applications. I'm constantly looking to learn and apply new concepts that simplify my workflow, the developer experience of my peers and the user experience of everyone.
+    Hi! I'm a developer who enjoys building web applications. I'm constantly looking to learn and apply new concepts that simplify my workflow, the developer experience of my peers and the user experience of everyone.
     </p>
 
     <div className="pt-12 pb-8">
