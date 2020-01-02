@@ -1,5 +1,6 @@
 import React from "react"
 import Tippy from "@tippy.js/react"
+import 'tippy.js/dist/tippy.css';
 
 const ProfileCardFooter = () => (
   <div className="mt-6 pb-16 lg:pb-0 w-4/5 lg:w-full mx-auto flex flex-wrap items-center">
