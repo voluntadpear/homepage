@@ -12,10 +12,19 @@ import NightModeToggle from './nightModeToggle'
 
 
 const Layout = ({ children, trackingWider }) => {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    if(!mounted) {
+    setMounted(true)
+    }
+  }, [mounted])
+
   return (
       <div className={`font-sans antialiased theme-text-color leading-normal ${trackingWider ? 'tracking-wider' : ''}`}>
         <main>{children}</main>
-        <NightModeToggle />
+        {mounted ?
+        <NightModeToggle /> : null}
       </div>
   )
 }
