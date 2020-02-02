@@ -37,7 +37,14 @@ module.exports = {
               maxWidth: 590,
             },
           },
-          `gatsby-remark-smartypants`
+          `gatsby-remark-smartypants`,
+          {
+            resolve:"@weknow/gatsby-remark-codepen",
+            options: {
+              theme: "dark",
+              height: 400
+            }
+          }
         ],
       },
     },
