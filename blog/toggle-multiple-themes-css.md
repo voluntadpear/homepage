@@ -5,9 +5,9 @@ title: Your CSS as source of truth for color themes
 summary: Building a themes switcher that parses your style sheet to find themes
 ---
 
-Supporting multiple color themes for your site can make it more attractive and accessible to users. Every bit of customization you can add to their experience is something that is well appreciated. In this post I'll show a small technique I used recently to easily manage multiple themes using a single style sheet and CSS custom properties.
+Supporting multiple color themes for your site can make it more attractive and accessible to users. Every bit of customization you can add to their experience is something that is well appreciated. In this post, I'll show a small technique I used recently to easily manage multiple themes using a single style sheet and CSS custom properties.
 
-For this example I have multiple color themes defined like this in my CSS style sheet:
+For this example, I have multiple color themes defined like this in my CSS style sheet:
 
 ```css
 .theme-white {
@@ -46,7 +46,7 @@ The `--bgColor` and `--darkerBg` properties are just derived from the `--base` a
 
 We need to get a list of all the available themes that we can change between. One way to do it is to maintain an array where we manually specify all of our available themes. However, this would mean that once we add or remove themes on our style sheet we would also need to add it in our script.
 
-An alternative I've found useful is to read the defined themes from our style sheet. This way, every time the defined themes change, we won't need adapt anything from our script and it will just work™:
+An alternative I've found useful is to read the defined themes from our style sheet. This way, every time the defined themes change, we won't need to adapt anything from our script and it will just work™:
 
 ```js
 function getAvailableThemes() {
@@ -107,4 +107,4 @@ The full example ⬇️
 
 https://codepen.io/goshi/pen/VwYJRoy
 
-I added additional code to store the selection on `localStorage` so that we can retrieve it on repeated visits. Hopefully the idea of parsing the content of the style sheet to have a [single source of truth](https://en.wikipedia.org/wiki/Single_source_of_truth) is appealing to you!
+I added additional code to store the selection on `localStorage` so that we can retrieve it on repeated visits. Hopefully, the idea of parsing the content of the style sheet to have a [single source of truth](https://en.wikipedia.org/wiki/Single_source_of_truth) is appealing to you!
