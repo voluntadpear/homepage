@@ -1,0 +1,755 @@
+---
+path: /blog/how-vue-devtools-work
+date: 2020-08-21T22:42:19.319Z
+title: How Vue DevTools Work
+summary: A guide to understand how a devtools extension is made
+---
+
+I've never built any browser extension, much less one for the Devtools. Out of curiosity I started looking around and I've found the [Google Chrome docs](https://developer.chrome.com/extensions/devtools) that served as an introduction of the different parts involved, but it wasn't enough to get on my feet and start developing my own.
+
+The [Google Chrome extensions](https://developer.chrome.com/extensions) documentation is extensive, and in many cases serves more like an API reference rather than a guide, but it gave me the broad picture about the multiple moving parts that are involved, and to learn that you even need to build an intercommunication bus between the different components of the extension.
+
+A pragmatic way to learn how a production extension is made through open source code. Initially, I started looking into the React DevTools, but since it's part of the [React monorepo](https://github.com/facebook/react/tree/master/packages) it would take some time to identify each of the relevant packages.
+
+Fortunately for my needs, the [Vue DevTools repo](https://github.com/vuejs/vue-devtools) is self-contained, allowing me to examine it in complete isolation from other Vue components.
+
+// Add something like "This is a guide around how the Vue Devtools are implemented..."
+
+## Vue Devtools Overview
+
+The code is organized as a [monorepo](https://www.atlassian.com/git/tutorials/monorepos) consisting of different packages, under the [`/packages` directory](https://github.com/vuejs/vue-devtools/tree/dev/packages). I followed the [manual installation instructions](https://github.com/vuejs/vue-devtools/#manual-installation) and I was able to get a development version of the extension up and running on my browser. 
+
+By following those instructions I learned that an entry point could be the `shell-chrome` package, and I was right. I knew I was in the right place when I saw the `manifest.json` file, this is the file that contains all the metadata related to our browser extension.
+
+Here we can find some relevant entry points:
+
+```json
+  "devtools_page": "devtools-background.html",
+  "background": {
+    "scripts": [
+      "build/background.js"
+    ],
+    "persistent": false
+  },
+    "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "build/hook.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "build/detector.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+```
+
+### Types of scripts
+
+The `devtools_page` property defines which page interacts with the Devtools panel when it's opened. That page usually contains a `<script>` tag as its only relevant content, which in turn will control when to create a new Devtools tab and the content it renders.
+
+The *`background` script* is an important part of any browser extension. It acts like an event listener which stays dormant until an event fires from either the DevTools page or a content script. As we'll see later on, it's used as a central message bus. They run in the context of the browser.
+
+In the future, [service workers are going to be used instead of background scripts](https://developer.chrome.com/extensions/migrating_to_service_workers) as part of browser extensions. This change is part of a set of changes that are tracked under [Manifest version 3](https://developer.chrome.com/extensions/migrating_to_manifest_v3) for extensions.
+
+*Content scripts* are the parts of an extension that are running in the context of the current web page. They can query the DOM, make changes to it  and communicate with the parent extension.
+
+Unlike regular page scripts, they have one important limitation. Content scripts live in "isolated worlds". They can't access variables created by other scripts, even if they're added to the `window` global.
+
+Due to this limitation, there is another category of scripts popularly known as *injected scripts*. They're added to the DOM by content scripts and in the case of Vue DevTools, are used extensively as we're going to observe later.
+
+Going back to the Vue DevTools repo, notice how all of these paths start with `build/` but we don't have a `build` directory inside `shell-chrome`. Let's take a quick look at our inner `package.json` file:
+
+```json
+{
+  "name": "@vue-devtools/shell-chrome",
+  "version": "0.0.0",
+  "dependencies": {
+    "@vue-devtools/app-backend": "^0.0.0",
+    "@vue-devtools/app-frontend": "^0.0.0",
+    "@vue-devtools/shared-utils": "^0.0.0"
+  },
+  "devDependencies": {
+    "@vue-devtools/build-tools": "^0.0.0",
+    "webpack": "^4.19.0",
+    "webpack-cli": "^3.1.0"
+  }
+}
+```
+
+We define other packages from our monorepo as dependencies, including `@vue-devtools/build-tools` as a development one.
+
+The way this monorepo is structured is by using [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/). Let's go to our root `package.json` instead:
+
+```json
+  "workspaces": [
+    "packages/*"
+  ],
+```
+
+We add everything under `packages` as part of our monorepo. Now let's see what our `build` script looks like:
+
+```json
+"build": "cd packages/shell-chrome && cross-env NODE_ENV=production webpack --progress --hide-modules"
+```
+
+That's it! Now we know that inside `packages/shell-chrome` we're using Webpack to produce a build. So that's when the `build` folder must be being created.
+
+Analyzing the whole build process of this extension is out of scope for this post but if you're interested in learning more about it, [this `webpack.config.js` file](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/webpack.config.js) is a good place to start.
+
+## Vue DevTools architecture
+
+![Diagram showing the architecture of the Vue DevTools extension](./vue-devtools.png)
+
+Each different type of script represents a different entry point for a browser extension. Let's start by looking at [detector.js](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/detector.js). This script runs on the current visited page but on its own isolated world. To workaround this, it includes the helper:
+
+```js
+function installScript (fn) {
+  const source = ';(' + fn.toString() + ')(window)'
+
+  if (isFirefox) {
+    window.eval(source) // in Firefox, this evaluates on the content window
+  } else {
+    const script = document.createElement('script')
+    script.textContent = source
+    document.documentElement.appendChild(script)
+    script.parentNode.removeChild(script)
+  }
+}
+```
+
+Wraps the passed `fn` function on a [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) string to add it on the page. Now it can run just as any other script on the page.
+
+```js
+if (document instanceof HTMLDocument) {
+  installScript(detect)
+  installScript(installToast)
+}
+```
+
+```detector.js``` injects two functions, `detect` and `installToast`. 
+
+```installToast``` adds a `__VUE_DEVTOOLS_TOAST__(message, type)` method to the `window` object so that messages like "Remote Devtools Connected" can be shown. Its code is part of the `app-backend` package of the repo, under the [toast.js](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/toast.js) module.
+
+The main code of the `detector` content script, however, is contained on the `detect` function. It polls the document for 10 seconds and checks for one of these possibilities:
+
+1. `window.__NUXT__` or `window.$nuxt` are detected.
+2. There's an element inside the DOM tree that contains a `__vue__` property.
+
+In either case, the `Vue` constructor is extracted and a notification is sent to the background script.
+
+The background script has a [`chrome.runtime.onMessage` listener registered](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/shell-chrome/src/background.js#L79-L96) that can be used by any process that is part of the extension. In our case it's only used by `detector.js`, so its code is kept simple:
+
+```js
+chrome.runtime.onMessage.addListener((req, sender) => {
+  if (sender.tab && req.vueDetected) {
+    const suffix = req.nuxtDetected ? '.nuxt' : ''
+
+    chrome.browserAction.setIcon({
+      tabId: sender.tab.id,
+      path: {
+        16: `icons/16${suffix}.png`,
+        48: `icons/48${suffix}.png`,
+        128: `icons/128${suffix}.png`
+      }
+    })
+    chrome.browserAction.setPopup({
+      tabId: sender.tab.id,
+      popup: req.devtoolsEnabled ? `popups/enabled${suffix}.html` : `popups/disabled${suffix}.html`
+    })
+  }
+})
+```
+
+That's the logic that makes the Vue DevTools extension icon colorful when Vue is detected on the current page, and as you can see, even the markup for the corresponding popup is included.
+
+Now let's examine the other content script, [`hook.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/hook.js).
+
+```js
+import { installHook } from '@back/hook'
+```
+
+This is the only line of specific code. The rest of the logic that you can check if you inspect its source code, is just the very same logic to inject a script that is used on `detector.js`. I suspect that the `installScript` definition that we studied earlier could possibly be extracted to a common module and imported from both content scripts.
+
+`@back` on the `@back/hook` module path is an alias that is defined using Webpack. They are defined [here](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/build-tools/src/createConfig.js#L20-L24). `@back` points to `app-backend/src`, so to learn more about `installHook` we need to open the [`hook.js` module](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/hook.js).
+
+As the comments on top of the file explain, this is mainly an event emitter implementation that is exposed under the `__VUE_DEVTOOLS_GLOBAL_HOOK__`:
+
+```js
+Object.defineProperty(target, '__VUE_DEVTOOLS_GLOBAL_HOOK__', {
+  get () {
+    return hook
+  }
+})
+```
+
+After defining the event emitter, a listener for the `init` event is added:
+
+```js
+hook.once('init', Vue => {
+  hook.Vue = Vue
+
+  Vue.prototype.$inspect = function () {
+    const fn = target.__VUE_DEVTOOLS_INSPECT__
+    fn && fn(this)
+  }
+})
+```
+
+a `Vue` property is set on `hook` and it's the main reference to the inspected object. I was confused for some time at this point. We already had `detector.js` that knows when there's a `Vue` instance, but it never invokes `__VUE_DEVTOOLS_GLOBAL_HOOK__` in any way. What was going on? After a lot of debugging, I found out that I wasn't looking at the correct place at all to understand when the `init` event was emitted. Turns out it's done by the Vue runtime itself!!!
+
+Here's the code under [the core Vue repo](https://github.com/vuejs/vue/blob/6fe07ebf5ab3fea1860c59fe7cdd2ec1b760f9b0/src/platforms/web/runtime/index.js#L51):
+
+```js
+import { devtools, inBrowser } from 'core/util/index'
+
+/// ...
+
+if (config.devtools) {
+  if (devtools) {
+    devtools.emit('init', Vue)
+  } else if (
+    process.env.NODE_ENV !== 'production' &&
+    process.env.NODE_ENV !== 'test'
+  ) {
+    console[console.info ? 'info' : 'log'](
+      'Download the Vue Devtools extension for a better development experience:\n' +
+      'https://github.com/vuejs/vue-devtools'
+    )
+  }
+}
+```
+
+Yes, we even receive a nice suggestion to download the extension itself if it's not detected by Vue. Now if we [follow the codebase](https://github.com/vuejs/vue/blob/6fe07ebf5ab3fea1860c59fe7cdd2ec1b760f9b0/src/core/util/env.js#L54) we can check that the `devtools` object is defined to something familiar to us:
+
+```js
+// detect devtools
+export const devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__
+```
+
+That's it for the initial content scripts that unconditionally run for every web page we visit while the Vue DevTools extension is active. Let's take a look at our DevTools script: `devtools_background.js`.
+
+```js
+// This is the devtools script, which is called when the user opens the
+// Chrome devtool on a page. We check to see if we global hook has detected
+// Vue presence on the page. If yes, create the Vue panel; otherwise poll
+// for 10 seconds.
+```
+
+Those are the top comments of the file. Pretty self-explanatory! The "global hook" refers to `window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue`, that just as we just saw, will be defined if the Vue runtime emits the `"init"` event. You can check the `createPanelIfHasVue` function to learn more about their polling mechanism (Recursive calls to `setTimeout` with 1000 ms of delay until a counter increments up to 10). Here's what then happens when Vue is detected:
+
+```js
+chrome.devtools.panels.create(
+  'Vue', 'icons/128.png', 'devtools.html',
+  panel => {
+    // panel loaded
+    panel.onShown.addListener(onPanelShown)
+    panel.onHidden.addListener(onPanelHidden)
+  }
+)
+```
+
+That's all the code that is required to add a new panel to the Chrome DevTools window! We define the title of the tab, its icon, the page to render and a callback to be called after creation.
+
+The actual DevTools panel is unsurprisingly, a regular Vue.js SPA. The HTML on `devtools.html` is mainly a placeholder to be filled once Vue takes over:
+
+```html
+<body>
+  <div id="container">
+    <div id="app"></div>
+  </div>
+  <script src="./build/devtools.js"></script>
+</body>
+```
+
+Let's check `devtools.js`:
+
+```js
+import { initDevTools } from '@front'
+import Bridge from '@utils/bridge'
+
+initDevTools({
+  connect (cb) {
+    // 1. inject backend code into page
+    injectScript(chrome.runtime.getURL('build/backend.js'), () => {
+      // 2. connect to background to setup proxy
+      const port = chrome.runtime.connect({
+        name: '' + chrome.devtools.inspectedWindow.tabId
+      })
+      let disconnected = false
+      port.onDisconnect.addListener(() => {
+        disconnected = true
+      })
+
+      const bridge = new Bridge({
+        listen (fn) {
+          port.onMessage.addListener(fn)
+        },
+        send (data) {
+          if (!disconnected) {
+            port.postMessage(data)
+          }
+        }
+      })
+      // 3. send a proxy API to the panel
+      cb(bridge)
+    })
+}
+```
+
+After all the initial boilerplate, here is where stuff gets interesting 🎉. This DevTools extension follows a model based on two main actors: *backend* and *frontend*.
+
+![Diagram showing the backend of an extension, represented as dealing with the inspected page content, and the frontend, handling the devtools panel UI](./backend-frontend.png)
+
+We can think of this like any regular client/server application where these two parts interchange information with each other. In our case, the "frontend" is the Vue DevTools panel itself, and our backend is a pair of content and injected scripts that run in the context of the inspected web page.
+
+`devtools.js` adds the [`src/backend.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/backend.js) injected script to the page. Afterward, it establishes a connection to the background script and initializes an instance of a custom `Bridge` class registering two callbacks, `listen` and `send` linking them to messages received from and sent to the background script.
+
+Before diving further into the frontend, let's take a look at what happens on `src/backend.js`:
+
+```js
+function sendListening () {
+  window.postMessage({
+    source: 'vue-devtools-backend-injection',
+    payload: 'listening'
+  }, '*')
+}
+sendListening()
+```
+
+The `window` (of the inspected page) is used as a communication mechanism. As soon as this script starts, this `{source: 'vue-devtools-backend-injection', payload: 'listening'}` is sent.
+
+```js
+window.addEventListener('message', handshake)
+
+function handshake (e) {
+  if (e.data.source === 'vue-devtools-proxy' && e.data.payload === 'init') {
+    window.removeEventListener('message', handshake)
+
+    let listeners = []
+    const bridge = new Bridge({
+      listen (fn) {
+        const listener = evt => {
+          if (evt.data.source === 'vue-devtools-proxy' && evt.data.payload) {
+            fn(evt.data.payload)
+          }
+        }
+        window.addEventListener('message', listener)
+        listeners.push(listener)
+      },
+      send (data) {
+        window.postMessage({
+          source: 'vue-devtools-backend',
+          payload: data
+        }, '*')
+      }
+    })
+
+    // ...[some code ignored]
+
+    initBackend(bridge)
+  } else {
+    sendListening()
+  }
+}
+```
+
+Just like on the DevTools panel, here we also construct a `Bridge` instance registering a pair of `listen`/`send` callbacks. However, instead of relying on the background script to propagate the messages, we use the `window` itself to listen to `MessageEvent`s or trigger `postMessage` accordingly.
+
+Let's take a look at this now famous [`Bridge`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shared-utils/src/bridge.js):
+
+```js
+import { EventEmitter } from 'events'
+
+const BATCH_DURATION = 100
+
+export default class Bridge extends EventEmitter {
+  send (event, payload) {
+    // ...
+  }
+
+  // Log a message to the devtools background page.
+  log (message) {
+    this.send('log', message)
+  }
+
+  _flush () {
+    // ...
+  }
+
+  _emit (message) {
+    // ...
+  }
+
+  _send (messages) {
+    // ...
+  }
+
+  _nextSend () {
+    // ...
+  }
+}
+```
+
+`Bridge` is an event emitter! And it's the main communication mechanism between the backend and the frontend.
+
+Let's go back for a bit... Remember how as part of the Devtools panel initialization on `src/devtools.js` a background script connection was established?
+
+```js
+// 1. inject backend code into page
+injectScript(chrome.runtime.getURL('build/backend.js'), () => {
+  // 2. connect to background to setup proxy
+  const port = chrome.runtime.connect({
+    name: '' + chrome.devtools.inspectedWindow.tabId
+  })
+```
+
+Here is how the backgronud script reacts to that:
+
+```js
+chrome.runtime.onConnect.addListener(port => {
+  let tab
+  let name
+  if (isNumeric(port.name)) {
+    tab = port.name
+    name = 'devtools'
+    installProxy(+port.name)
+  } else {
+    tab = port.sender.tab.id
+    name = 'backend'
+  }
+
+  if (!ports[tab]) {
+    ports[tab] = {
+      devtools: null,
+      backend: null
+    }
+  }
+  ports[tab][name] = port
+
+  if (ports[tab].devtools && ports[tab].backend) {
+    doublePipe(tab, ports[tab].devtools, ports[tab].backend)
+  }
+})
+```
+
+If `port.name` from the incoming connection to the background script is numeric, then it's assumed to be the Devtools panel and `installProxy` is invoked (the `+` prefixed to `port.name` is used to coerce the `string` value to a `number`).
+
+```js
+function installProxy (tabId) {
+  chrome.tabs.executeScript(tabId, {
+    file: '/build/proxy.js'
+  }, function (res) {
+    if (!res) {
+      ports[tabId].devtools.postMessage('proxy-fail')
+    } else {
+      console.log('injected proxy to tab ' + tabId)
+    }
+  })
+}
+```
+
+`installProxy` adds a new content script: [`src/proxy.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/proxy.js). Let's analyze it:
+
+```js
+const port = chrome.runtime.connect({
+  name: 'content-script'
+})
+
+port.onMessage.addListener(sendMessageToBackend)
+window.addEventListener('message', sendMessageToDevtools)
+port.onDisconnect.addListener(handleDisconnect)
+```
+
+First, it also connects to the background script and then sets up a listener to message received from the background script (in which case it sends it to the backend), and also a listener for messages received from the inspected web page (in which case it sends to the frontend - a.k.a. the Devtools panel).
+
+```js
+sendMessageToBackend('init')
+
+function sendMessageToBackend (payload) {
+  window.postMessage({
+    source: 'vue-devtools-proxy',
+    payload: payload
+  }, '*')
+}
+```
+
+This might result familiar, we send an `init` message to the backend, which is, as we saw earlier, what [`src/backend.js`](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/shell-chrome/src/backend.js#L17-L50) was waiting for on its `handshake` function to continue its initialization.
+
+```js
+function sendMessageToDevtools (e) {
+  if (e.data && e.data.source === 'vue-devtools-backend') {
+    port.postMessage(e.data.payload)
+  } else if (e.data && e.data.source === 'vue-devtools-backend-injection') {
+    if (e.data.payload === 'listening') {
+      sendMessageToBackend('init')
+    }
+  }
+}
+```
+
+For propagating messages back to the frontend, it uses the connection to the background script. Despite its name, there's one case it sends an  `'init'` message to the backend instead. If the message received from the `window` is a `'listening'` one, which is [sent by the backend itself](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/shell-chrome/src/backend.js#L50-L52) to signal it's waiting for initialization.
+
+![Diagram illustrating how messages flow between the frontend and the backend, using the proxy as bus and the background script as a mechanism for the proxy to propagate messages from the backend to the devtools page](./communication-bridge.png)
+
+Even though the `Bridge` instances are constructed on `src/devtools.js` and `src/backend.js`, they both send those instances to the respective `frontend` and `backend` packages of the extension through callbacks.
+
+In the case of `src/devtools.js`:
+
+```js
+import { initDevTools } from '@front'
+
+initDevTools({
+  connect (cb) {
+    injectScript(chrome.runtime.getURL('build/backend.js'), () => {
+      // ...
+      const bridge = new Bridge({
+        // ...
+      })
+      cb(bridge)
+    })
+  }
+```
+
+In the case of `src/backend.js`:
+
+```js
+import { initBackend } from '@back'
+
+function handshake (e) {
+  if (e.data.source === 'vue-devtools-proxy' && e.data.payload === 'init') {
+    // ...
+    const bridge = new Bridge({
+      // ...
+    })
+    
+    // ...
+    initBackend(bridge)
+  }
+}
+```
+So now that both the frontend and backend implementations hold instances to their respective communication bridge, we can take a look at how they use it.
+
+Let's take a look at the `initDevTools` function of [`app-frontend/src/index.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-frontend/src/index.js):
+
+```js
+export function initDevTools (shell) {
+  initStorage().then(() => {
+    initApp(shell)
+    shell.onReload(() => {
+      if (app) {
+        app.$el.classList.add('disconnected')
+        app.$destroy()
+      }
+      window.bridge.removeAllListeners()
+      initApp(shell)
+    })
+  })
+}
+```
+
+`shell` is the object literal constructed on `shell-chrome/src/devtools.js` that contains some methods that are invoked here. `initStorage` uses the [`chrome.storage` API](https://developer.chrome.com/extensions/storage) as storage mechanism. `initApp` is where the UI magic happens:
+
+```js
+function initApp (shell) {
+  shell.connect(bridge => {
+    window.bridge = bridge
+  // ...
+```
+
+The assignment where the fundamental communication link is established, `window.bridge = bridge`. Now it's available on the global context of the Devtools panel.
+
+```js
+    initSharedData({
+      bridge,
+      Vue,
+      persist: true
+    }).then(() => {
+      if (SharedData.logDetected) {
+        bridge.send('log-detected-vue')
+      }
+
+      const store = createStore()
+
+      bridge.once('ready', version => {
+        store.commit(
+          'SHOW_MESSAGE',
+          'Ready. Detected Vue ' + version + '.'
+        )
+        bridge.send('events:toggle-recording', store.state.events.enabled)
+
+        if (isChrome) {
+          chrome.runtime.sendMessage('vue-panel-load')
+        }
+      })
+    // ...
+```
+
+A set of shared data between the frontend and the backend is initialized. Once it's done, a Vuex store is initialized (after all, the devtools panel is a regular Vue.js app!) and a listener for the `ready` event is added. See how messages are sent and received using the bridge.
+
+You can explore the shared data initialized on [`shared-utils/src/shared-data.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shared-utils/src/shared-data.js). As part of the shared data initialization, more messages is transmitted using the bridge:
+
+```js
+bridge.on('shared-data:load', () => {
+  // Send all fields
+  Object.keys(internalSharedData).forEach(key => {
+    sendValue(key, internalSharedData[key])
+  })
+  bridge.send('shared-data:load-complete')
+})
+bridge.on('shared-data:init-complete', () => {
+  clearInterval(initRetryInterval)
+  resolve()
+})
+
+bridge.send('shared-data:master-init-waiting')
+// In case backend init is executed after frontend
+bridge.on('shared-data:slave-init-waiting', () => {
+  bridge.send('shared-data:master-init-waiting')
+})
+```
+
+Going back to the frontend, here are some additional listeners that are set up:
+
+```js
+// ...
+bridge.on('instance-details', details => {
+  store.commit('components/RECEIVE_INSTANCE_DETAILS', parse(details))
+})
+
+bridge.on('toggle-instance', payload => {
+  store.commit('components/TOGGLE_INSTANCE', parse(payload))
+})
+
+bridge.on('vuex:init', () => {
+  store.commit('vuex/INIT')
+})
+
+bridge.on('vuex:mutation', payload => {
+  store.dispatch('vuex/receiveMutation', payload)
+})
+
+bridge.on('router:changed', payload => {
+  store.commit('router/CHANGED', parse(payload))
+})
+
+bridge.on('routes:init', payload => {
+  store.commit('routes/INIT', parse(payload))
+})
+
+bridge.on('routes:changed', payload => {
+  store.commit('routes/CHANGED', parse(payload))
+})
+
+// ...
+```
+
+Those are just some examples of some hooks that are added so that the backend can instruct devtools about state mutations and router changes.
+
+After all of this, the Vue app is mounted into the div element with id `app` defined on `devtools.html`, and that's it! You can keep exploring the different Vue components, Vuex mutations, bridge events and messages sent, etc.
+
+Now it's the turn of the backend, what's happens on [`app-backend/src/index.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/index.js)?
+
+```js
+const hook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__
+
+export function initBackend (_bridge) {
+  bridge = _bridge
+
+  if (hook.Vue) {
+    isLegacy = hook.Vue.version && hook.Vue.version.split('.')[0] === '1'
+    connect(hook.Vue)
+  } else {
+    hook.once('init', connect)
+  }
+
+  initRightClick()
+}
+```
+
+Great, we also store a reference to the bridge and check if the `Vue` instance was already detected. In case it hasn't, we wait for it. Otherwise, we proceed to `connect` to it.
+
+```js
+function connect (Vue) {
+  initSharedData({
+    bridge,
+    Vue
+  }).then(() => {
+    // ...
+```
+
+Just like we did on the frontend, we also initialized the shared data over here. Then:
+
+```js
+hook.currentTab = 'components'
+bridge.on('switch-tab', tab => {
+  hook.currentTab = tab
+  if (tab === 'components') {
+    flush()
+  }
+})
+
+// the backend may get injected to the same page multiple times
+// if the user closes and reopens the devtools.
+// make sure there's only one flush listener.
+hook.off('flush')
+hook.on('flush', () => {
+  if (hook.currentTab === 'components') {
+    flush()
+  }
+})
+```
+
+We set up some listeners using the `bridge` and set the `currentTab` property of the hook (`window.__VUE_DEVTOOLS_GLOBAL_HOOK__`) to know when to perform a `'flush'`(which is sort of a Vue instance status sync cycle where the component tree structure is sent over to the devtools).
+
+```js
+bridge.on('select-instance', id => {
+  currentInspectedId = id
+  const instance = findInstanceOrVnode(id)
+  if (!instance) return
+  if (!/:functional:/.test(id)) bindToConsole(instance)
+  flush()
+  bridge.send('instance-selected')
+})
+
+bridge.on('scroll-to-instance', id => {
+  const instance = findInstanceOrVnode(id)
+  if (instance) {
+    scrollIntoView(instance)
+    highlight(instance)
+  }
+})
+
+bridge.on('filter-instances', _filter => {
+  filter = _filter.toLowerCase()
+  flush()
+})
+
+bridge.on('refresh', scan)
+```
+
+Some additional listeners are added, that allows the inspected page to respond to DOM instructions sent from the devtools panel, such as scrolling to a component, scan the page for root Vue instances, or select a component instance.
+
+After the backend initialization ends, a `ready` event is sent through the bridge:
+
+```js
+bridge.send('ready', Vue.version)
+```
+
+That, if you remember from earlier, is [picked up on the frontend](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/app-frontend/src/index.js#L118-L128).
+
+That's it for our backend initialization walkthrough. I'd highly recommend you to keep exploring the multiple aspects of the extension, such as the [Vuex initialization](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/vuex.js) and [routing initialization](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/router.js) logic, and study the different interactions between the frontend and the backend.
+
+And that's it for this guide! When I started this journey through how a production-level developer tools extension was made, I never imagined it would have this level of complexity and moving parts. I hope that this write-up can be helpful if you're thinking about making the Vue Devtools even better, or if you need to build an awesome new Devtools extension for your use case! I realized that there aren't that many resources available explaining the different aspects of one so perhaps this can help a bit :)
+
+Thank you for reading and have a nice day!
+
