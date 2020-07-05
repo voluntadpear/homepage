@@ -9,15 +9,30 @@ I've never built any browser extension, much less one for the Devtools. Out of c
 
 The [Google Chrome extensions](https://developer.chrome.com/extensions) documentation is extensive, and in many cases serves more like an API reference rather than a guide, but it gave me a broad picture about the multiple moving parts that are involved, and to learn that you even need to build an intercommunication bus between the different components of the extension.
 
-A pragmatic way to learn about all of this is through open source code. Initially, I started looking into the React DevTools, but since it's part of the [React monorepo](https://github.com/facebook/react/tree/master/packages) it would take some time to identify each of the relevant packages.
+A pragmatic way to learn about all of this is through open-source code. Initially, I started looking into the React DevTools, but since it's part of the [React monorepo](https://github.com/facebook/react/tree/master/packages) it would take some time to identify each of the relevant packages.
 
 Fortunately for my needs, the [Vue DevTools repo](https://github.com/vuejs/vue-devtools) is self-contained, allowing me to examine it in complete isolation from other Vue components.
 
-This is a guide that gets into the main parts of the official Vue DevTools extension to learn from it and understand a successful approach for building this kind of tools.
+This is a guide that gets into the main parts of the official Vue DevTools extension to learn from it and understand a successful approach for building these kinds of tools.
 
-This guide is divided under different sections, and goes step by step with links to the official source code and analyzing some relevant snippets along the way.
+This guide is divided under different sections and goes step by step with links to the official source code and analyzing some relevant snippets along the way.
 
 Let's dive right into it!
+
+## Table of contents 
+  * [Vue Devtools Overview](#vue-devtools-overview)
+    * [Manifest file](#manifest-file)
+    * [Types of scripts](#types-of-scripts)
+    * [Vue DevTools architecture](#vue-devtools-architecture)
+  * [Vue detector](#vue-detector)
+  * [Background script](#background-script)
+  * [Hook](#hook)
+  * [DevTools page](#devtools-page)
+  * [Backend and Frontend](#backend-and-frontend)
+    * [Bridge](#bridge)
+  * [Proxy](#proxy)
+  * [Frontend](#frontend)
+  * [Backend](#backend)
 
 ## Vue Devtools Overview
 
@@ -59,7 +74,7 @@ Here we can find some relevant entry points:
   ]
 ```
 
-Each of those specified files can be seen as different entry points, because browser extensions are composed of multiple scripts that run in different contexts.
+Each of those specified files can be seen as different entry points because browser extensions are composed of multiple scripts that run in different contexts.
 
 Before jumping into studying these files in detail, I'll like to briefly focus on the build tooling for this project.
 
@@ -127,7 +142,7 @@ Each different type of script represents a different entry point for a browser e
 
 Let's start by looking at [`src/detector.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/detector.js). This is a **content script**.
 
-**Content scripts** are the parts of an extension that are running in the context of the current web page. They can query the DOM, make changes to it and communicate with the parent extension.
+**Content scripts** are the parts of an extension that are running in the context of the current web page. They can query the DOM, make changes to it, and communicate with the parent extension.
 
 Unlike regular page scripts, they have one important limitation. Content scripts live in "isolated worlds". They can't access variables created by other scripts, even if they're added to the `window` global.
 
@@ -150,7 +165,7 @@ function installScript (fn) {
 }
 ```
 
-It wraps the provided `fn` function on a [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) string to add it on the page. Now it can run just as any other script on the page.
+It wraps the provided `fn` function on a [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) string to add it on the page. Now it can run just like any other regular script on the page.
 
 ```js
 // shell-chrome/src/detector.js
@@ -161,11 +176,11 @@ if (document instanceof HTMLDocument) {
 }
 ```
 
-```detector.js``` injects two functions using this technique, `detect` and `installToast`. These are known as... *injected scripts*.
+`detector.js` injects two functions using this technique, `detect` and `installToast`. These are known as... *injected scripts*.
 
 The pattern of injected scripts is unofficial, but it became an ad-hoc standard by the community, based on the common case of needing to run scripts on the current page with full access to the `window` global and changes performed by other scripts.
 
-Let's focus on ```installToast``` first. This function adds a `__VUE_DEVTOOLS_TOAST__(message, type)` method to the `window` object so that messages like "Remote Devtools Connected" can be shown. Its code is part of the `app-backend` package of the repo, under the [toast.js](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/toast.js) module. Seeing a reference to "backend" might seem odd at this point. Don't worry too much about it now, we're going to explain it later.ttt
+Let's focus on `installToast` first. This function adds a `__VUE_DEVTOOLS_TOAST__(message, type)` method to the `window` object so that messages like "Remote Devtools Connected" can be shown. Its code is part of the `app-backend` package of the repo, under the [toast.js](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/toast.js) module. Seeing a reference to "backend" might seem odd at this point. Don't worry too much about it now, we're going to explain it later.ttt
 
 The main code of the `detector` content script, however, is contained on the `detect` function (see the source code [here](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/shell-chrome/src/detector.js#L10-L51)). It polls the document for 10 seconds and checks for one of these possibilities:
 
@@ -194,7 +209,7 @@ Wait, what's a **background script**? Well, it's a type of script present in bro
 
 In the future, [service workers are going to be used instead of background scripts](https://developer.chrome.com/extensions/migrating_to_service_workers) as part of Google Chrome extensions. This change is part of a set of changes that are tracked under [Manifest version 3](https://developer.chrome.com/extensions/migrating_to_manifest_v3) for extensions.
 
-This background script in particular, has a [`chrome.runtime.onMessage` listener registered](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/shell-chrome/src/background.js#L79-L96) that can be used by any process that is part of the extension. Here it's only used by `detector.js`, so its code is not large:
+This background script, in particular, has a [`chrome.runtime.onMessage` listener registered](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/shell-chrome/src/background.js#L79-L96) that can be used by any process that is part of the extension. Here it's only used by `detector.js`, so its code is not large:
 
 ```js
 // shell-chrome/src/backgroound.js
@@ -221,11 +236,11 @@ chrome.runtime.onMessage.addListener((req, sender) => {
 
 That's the logic that makes the Vue DevTools extension icon colorful when Vue is detected on the current page, and as you can see, even the markup for the corresponding popup is included.
 
-That's enough background script for now 😅 Later on, we are going to explore the rest of it.
+That's enough background script for now 😅. Later on, we are going to explore the rest of it.
 
 ## Hook
 
-Like `detector.js`, there was other content script declared on the manifest file. Remember, these are our entry points). This is [`hook.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/hook.js).
+Like `detector.js`, there was another content script declared on the manifest file. Remember, these are our entry points). This is [`hook.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/hook.js).
 
 ```js
 // shell-chrome/src/hook.js
@@ -233,7 +248,7 @@ Like `detector.js`, there was other content script declared on the manifest file
 import { installHook } from '@back/hook'
 ```
 
-This is the only line of specific code. The rest of the logic that you can check if you inspect its source code, is just the very same logic to inject a script that is used on `detector.js`. I suspect that the `installScript` definition that we studied earlier could possibly be extracted to a common module and imported from both content scripts. Might be something nice to try and perhaps send a PR for 👀.
+This is the only line of specific code. The rest of the logic that you can check if you inspect its source code, is just the very same logic to inject a script that is used on `detector.js`. I suspect that the `installScript` definition that we studied earlier could be extracted to a common module and imported from both content scripts. Might be something nice to try and perhaps send a PR for 👀.
 
 `@back` on the `@back/hook` module path is an alias that is defined using Webpack. They are defined [here](https://github.com/vuejs/vue-devtools/blob/933063fd06860464be4bfd8c83ba09d7fc2c753e/packages/build-tools/src/createConfig.js#L20-L24). `@back` points to `app-backend/src`, so to learn more about `installHook` we need to open the [`hook.js` module](https://github.com/vuejs/vue-devtools/blob/dev/packages/app-backend/src/hook.js).
 
@@ -252,6 +267,8 @@ Object.defineProperty(target, '__VUE_DEVTOOLS_GLOBAL_HOOK__', {
 After defining the event emitter, a listener for the `init` event is added:
 
 ```js
+// app-backend/src/hook.js
+
 hook.once('init', Vue => {
   hook.Vue = Vue
 
@@ -264,9 +281,9 @@ hook.once('init', Vue => {
 
 A `Vue` property is set on `hook`. It's a very important property since it's the main reference to the Vue instance of the currently inspected page. 
 
-I was confused for some time at this point. We already had `detector.js` that knows when there's a `Vue` instance, but it never invokes `__VUE_DEVTOOLS_GLOBAL_HOOK__` in any way. What's going on here? When is this `"init"` event actually emitted? After a lot of debugging around the `vue-devtools` repository, I wasn't able to find it, it was surely not related to `detector.js` in any way, but where was it?
+I was confused for some time at this point. We already had `detector.js` that knows when there's a `Vue` instance, but it never invokes `__VUE_DEVTOOLS_GLOBAL_HOOK__` in any way. What's going on here? When is this `"init"` event emitted? After a lot of debugging around the `vue-devtools` repository, I wasn't able to find it, it was surely not related to `detector.js` in any way, but where was it?
 
-After A LOT of deubgging, I found out that I wasn't looking at the correct place at all to understand when the `init` event was emitted. Turns out it's done by the Vue runtime itself!!!
+After A LOT of debugging, I found out that I wasn't looking at the correct place at all to understand when the `init` event was emitted. Turns out it's done by the Vue runtime itself!!!
 
 Here's the code under [the core Vue repo](https://github.com/vuejs/vue/blob/6fe07ebf5ab3fea1860c59fe7cdd2ec1b760f9b0/src/platforms/web/runtime/index.js#L51):
 
@@ -305,7 +322,7 @@ That's it for the initial content scripts that unconditionally run for every web
 
 ## DevTools page
 
-Let's take a look now at the `devtools_page` property defined in the manifest file. It defines a page that will be used when the user opens the DevTools panel of the browser (e.g. using the `Ctrl`/`⌘` + J keys combination). Usually that page only inserts a `<script>` tag that will handle all the actual logic that we want to run in the DevTools window context. In our case this is the [`devtools_background.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/devtools-background.js) file. This is what is known as a **devtools script**:
+Let's take a look now at the `devtools_page` property defined in the manifest file. It defines a page that will be used when the user opens the DevTools panel of the browser (e.g. using the `Ctrl`/`⌘` + J keys combination). Usually, that page only inserts a `<script>` tag that will handle all the actual logic that we want to run in the DevTools window context. In our case, this is the [`devtools_background.js`](https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/devtools-background.js) file. This is what is known as a **devtools script**:
 
 ```js
 // This is the devtools script, which is called when the user opens the
@@ -496,7 +513,7 @@ injectScript(chrome.runtime.getURL('build/backend.js'), () => {
   })
 ```
 
-Here is how the backgronud script reacts to that:
+Here is how the background script reacts to that:
 
 ```js
 // shell-chrome/src/background.js
@@ -561,7 +578,7 @@ window.addEventListener('message', sendMessageToDevtools)
 port.onDisconnect.addListener(handleDisconnect)
 ```
 
-In the first place, it also connects to the background script and then sets up a listener for message that the background script sends, in which case it forwards the message to the backend. Also, a listener for messages received from the inspected web page is set, in which case it forwards the messasge to the frontend - a.k.a. the Devtools panel.
+In the first place, it also connects to the background script and then sets up a listener for messages that the background script sends, in which case it forwards the message to the backend. Also, a listener for messages received from the inspected web page is set, in which case it forwards the message to the frontend - a.k.a. the Devtools panel.
 
 ```js
 // shell-chrome/src/proxy.js
@@ -660,7 +677,7 @@ export function initDevTools (shell) {
 }
 ```
 
-`shell` is the object literal constructed on `shell-chrome/src/devtools.js` that contains some methods that are invoked here. `initStorage` uses the [`chrome.storage` API](https://developer.chrome.com/extensions/storage) as storage mechanism. `initApp` is where the UI magic happens:
+`shell` is the object literal constructed on `shell-chrome/src/devtools.js` that contains some methods that are invoked here. `initStorage` uses the [`chrome.storage` API](https://developer.chrome.com/extensions/storage) as a storage mechanism. `initApp` is where the UI magic happens:
 
 ```js
 // app-frontend/src/index.js
