@@ -915,6 +915,12 @@ That's it for our backend initialization walkthrough! I'd highly recommend you t
 
 ## Conclusion
 
-And here is where this journey ends! When I started studying how a production-level developer tools extension was made, I never imagined it would have this level of complexity and moving parts. I hope that this write-up can be helpful if you're thinking about making the Vue Devtools even better, or if you need to build an awesome new Devtools extension for your use case! I realized that there aren't that many resources available explaining the different aspects of one so perhaps this can help a bit :)
+And here is where this journey ends!
+
+When I started studying how a production-level developer tools extension was made, I never imagined it would have this level of complexity and moving parts.
+
+I hope that this write-up can be helpful if you're thinking about making the Vue Devtools even better, or if you need to build an awesome new Devtools extension for your use case
+
+I realized that there aren't that many resources available explaining the different aspects of one so perhaps this can help a bit :)
 
 Thank you for reading and have a nice day!
