@@ -5,7 +5,9 @@ title: How Vue DevTools Work
 summary: A guide on how a production-level devtools extension is made
 ---
 
-I've never built any browser extension, much less one for the Devtools. Out of curiosity I started looking around and I've found the [Google Chrome DevTools Extensions docs](https://developer.chrome.com/extensions/devtools) that served as an introduction of the different parts involved, but it wasn't enough to get on my feet and start developing my own.
+I've never built any browser extension, much less one for the Devtools. 
+
+Out of curiosity I started looking around and I've found the [Google Chrome DevTools Extensions docs](https://developer.chrome.com/extensions/devtools) that served as an introduction of the different parts involved, but it wasn't enough to get on my feet and start developing my own.
 
 The problem was that I lacked knowledge about the basic concepts behind a browser extension.
 
@@ -17,7 +19,7 @@ A pragmatic way to learn about all of this that I decided to take is through ope
 
 Fortunately for my needs, the [Vue DevTools repo](https://github.com/vuejs/vue-devtools) is self-contained, allowing me to examine it in complete isolation from other parts of the Vue code.
 
-This is a guide that gets into the main parts of the official Vue DevTools extension to learn from it and understand a successful approach for building these kinds of tools.
+This is a guide through the main parts of the official Vue DevTools extension to learn from it and understand a successful approach for building these kinds of tools.
 
 I hope that this way you can learn with a real world example what exactly each file does, and how everything fits together. **This guide isn't Vue specific in any way,** You don't need to be familiar with Vue at all to follow and hopefully learn something from this guide.
 
