@@ -13,7 +13,7 @@ The problem was that I lacked knowledge about the basic concepts behind a browse
 
 The complete [Google Chrome extensions](https://developer.chrome.com/extensions) documentation is extensive, and in many cases serves more like an API reference rather than a guide, but it gave me a broad picture about the multiple moving parts that are involved, and to learn that you even need to build an intercommunication bus between the different components of the extension.
 
-But beyond that, there wasn't a good resource for me to have a complete picture on what was really required and what would be the most useful for a DevTools extension, since it's a subset of what browser extensions can do.
+But beyond that, there wasn't a good resource for me to have a complete picture of what was required and what would be the most useful for a DevTools extension since it's a subset of what browser extensions can do.
 
 A pragmatic way to learn about all of this that I decided to take is through open-source code. Initially, I started looking into the React DevTools, but since it's part of the [React monorepo](https://github.com/facebook/react/tree/master/packages) it would take some time to identify each of the relevant packages.
 
@@ -21,7 +21,7 @@ Fortunately for my needs, the [Vue DevTools repo](https://github.com/vuejs/vue-d
 
 This is a guide through the main parts of the official Vue DevTools extension to learn from it and understand a successful approach for building these kinds of tools.
 
-I hope that this way you can learn with a real world example what exactly each file does, and how everything fits together. **This guide isn't Vue specific in any way,** You don't need to be familiar with Vue at all to follow and hopefully learn something from this guide.
+I hope that this way you can learn with a real-world example what exactly each file does, and how everything fits together. **This guide isn't Vue specific in any way,** You don't need to be familiar with Vue at all to follow and hopefully learn something from this guide.
 
 This guide is divided under different sections and goes step by step with links to the official source code and analyzing some relevant snippets along the way.
 
@@ -48,7 +48,7 @@ The code, which is [hosted on GitHub](https://github.com/vuejs/vue-devtools), is
 
 I followed the [manual installation instructions](https://github.com/vuejs/vue-devtools/#manual-installation) and I was able to get a development version of the extension up and running on my browser. 
 
-By following those instructions I learned that we should start by looking into the `shell-chrome` directory, as starting point of this journey. Here we find the `manifest.json` file, which contains all the metadata related to the browser extension.
+By following those instructions I learned that we should start by looking into the `shell-chrome` directory, as the starting point of this journey. Here we find the `manifest.json` file, which contains all the metadata related to the browser extension.
 
 ### Manifest file
 
@@ -481,7 +481,7 @@ Just like on the DevTools panel, here a `Bridge` instance registering a pair of 
 
 ### Bridge
 
-Here is the [`Bridge` constructor](https://github.com/vuejs/vue-devtools/blob/dev/packages/shared-utils/src/bridge.js) itself that both backend and frontend use:
+Here is the [`Bridge` constructor](https://github.com/vuejs/vue-devtools/blob/dev/packages/shared-utils/src/bridge.js) itself that both backend and frontend are using:
 
 ```js
 // shared-utils/src/bridge.js
