@@ -1,7 +1,7 @@
 ---
-path: /blog/how-vue-devtools-work
+path: /blog/how-a-devtools-extension-is-made
 date: 2020-07-05T22:42:19.319Z
-title: How Vue DevTools Work
+title: How a DevTools Extension is Made
 summary: A guide on how a production-level devtools extension is made
 ---
 
