@@ -25,9 +25,15 @@ export default component$(() => {
             <a href="/">Go back home</a>
           </p>
           <div class="flex items-center space-x-4 md:space-x-8 my-6">
-            <GitHub class="w-6 h-6 md:w-8 md:h-8" />
-            <Twitter class="w-6 h-6 md:w-8 md:h-8" />
-            <LinkedIn class="w-6 h-6 md:w-8 md:h-8" />
+            <a href="https://github.com/voluntadpear">
+              <GitHub class="w-6 h-6 md:w-8 md:h-8" />
+            </a>
+            <a href="https://twitter.com/voluntadpear">
+              <Twitter class="w-6 h-6 md:w-8 md:h-8" />
+            </a>
+            <a href="https://www.linkedin.com/in/guillermo-peralta-scura-00a852103/">
+              <LinkedIn class="w-6 h-6 md:w-8 md:h-8" />
+            </a>
           </div>
         </div>
       </footer>

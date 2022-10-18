@@ -34,9 +34,15 @@ export default component$(() => {
             Front-end Developer
           </p>
           <div class="flex items-center justify-center space-x-4 md:space-x-8 my-6">
-            <GitHub class="w-6 h-6 md:w-8 md:h-8" />
-            <Twitter class="w-6 h-6 md:w-8 md:h-8" />
-            <LinkedIn class="w-6 h-6 md:w-8 md:h-8" />
+            <a href="https://github.com/voluntadpear">
+              <GitHub class="w-6 h-6 md:w-8 md:h-8" />
+            </a>
+            <a href="https://twitter.com/voluntadpear">
+              <Twitter class="w-6 h-6 md:w-8 md:h-8" />
+            </a>
+            <a href="https://www.linkedin.com/in/guillermo-peralta-scura-00a852103/">
+              <LinkedIn class="w-6 h-6 md:w-8 md:h-8" />
+            </a>
           </div>
           <p class="text-lg text-my-blue-dark w-56 md:w-72 mt-14 lg:mt-24 ml-4 md:ml-14 lg:text-3xl lg:font-light lg:ml-0 lg:w-[26rem]">
             I like to tackle challenges, learn from them, write about them, and
