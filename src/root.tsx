@@ -33,7 +33,7 @@ export default component$(() => {
         <meta charSet="utf-8" />
         <RouterHead />
       </head>
-      <body lang="en" class={state.menuVisible ? "overflow-hidden" : undefined}>
+      <body class={state.menuVisible ? "overflow-hidden" : undefined}>
         <RouterOutlet />
         <ServiceWorkerRegister />
       </body>
