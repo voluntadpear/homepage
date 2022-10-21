@@ -236,4 +236,11 @@ export default component$(() => {
 
 export const head: DocumentHead = {
   title: "Guillermo Peralta Scura",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Web developer that likes to tackle challenges, learn from them, write about them, and have fun while in the process!",
+    },
+  ],
 };
