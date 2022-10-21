@@ -232,5 +232,5 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Guille",
+  title: "Guillermo Peralta Scura",
 };
