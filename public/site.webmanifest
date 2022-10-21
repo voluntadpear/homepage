@@ -15,5 +15,6 @@
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffbf69",
-  "display": "standalone"
+  "display": "standalone",
+  "start_url": "https://goshi.dev"
 }
