@@ -13,7 +13,7 @@ export default component$((props: Props) => {
     <article class={props.class}>
       <a
         href={props.url}
-        class="grid grid-cols-[8rem_1fr] lg:grid-cols-[13rem_1fr] text-my-blue-dark gap-x-4 lg:gap-y-12"
+        class="group grid grid-cols-[8rem_1fr] lg:grid-cols-[13rem_1fr] text-my-blue-dark gap-x-4 lg:gap-y-12"
       >
         <img
           src={props.thumbnailSrc}
@@ -22,7 +22,7 @@ export default component$((props: Props) => {
           width="137"
           class="w-32 lg:w-52 object-contain object-top"
         />
-        <p class="text-lg font-semibold lg:text-3xl lg:font-normal">
+        <p class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline">
           {props.title}
         </p>
         <p class="col-start-2 lg:col-start-1 lg:col-span-full">

@@ -7,6 +7,13 @@ export default [
     url: "https://www.youtube.com/watch?v=kV-M3aZ3y9c",
   },
   {
+    title: "Trabajo remoto desde Paraguay",
+    description:
+      "A talk in Spanish I did describing my experience as a remote worker from Paraguay",
+    thumbnail: "/video3.webp",
+    url: "https://youtu.be/fZUY6RBZfMg?t=2633",
+  },
+  {
     title: "PSPDFKit SharePoint Integration",
     description:
       "Live webinar in which I introduced the PSPDFKit integration for SharePoint Online",

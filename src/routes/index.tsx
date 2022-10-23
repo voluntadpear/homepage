@@ -57,7 +57,7 @@ export default component$(() => {
         <section class="bg-white md:py-52" id="posts">
           <div class="lg:max-w-5xl lg:mx-auto flex flex-col space-y-6">
             <h2 class="mt-24 md:my-24 ml-4 md:ml-10 text-3xl text-my-blue lg:text-4xl lg:ml-0">
-              Latest posts ✨
+              Latest posts <span aria-hidden="true">✨</span>
             </h2>
             <div class="mx-3 md:mx-6 space-y-6 md:grid md:grid-cols-2 md:space-y-0 md:gap-x-7 lg:gap-x-12 md:gap-y-12 lg:mx-0">
               {latestPosts.map((post) => (
@@ -80,7 +80,9 @@ export default component$(() => {
           id="about"
         >
           <div class="lg:max-w-5xl lg:mx-auto">
-            <h2 class="text-3xl text-my-blue">About me 👋</h2>
+            <h2 class="text-3xl text-my-blue">
+              About me <span aria-hidden="true">👋</span>
+            </h2>
             <div class="md:flex lg:justify-between lg:pt-16 lg:max-w-4xl">
               <img
                 loading="lazy"
@@ -115,7 +117,9 @@ export default component$(() => {
                 </p>
               </div>
             </div>
-            <h3 class="pt-8 text-2xl text-my-blue lg:text-3xl">Hobbies 🎸</h3>
+            <h3 class="pt-8 text-2xl text-my-blue lg:text-3xl">
+              Hobbies <span aria-hidden="true">🎸</span>
+            </h3>
             <div class="md:flex lg:justify-between lg:pt-16 lg:max-w-4xl">
               <img
                 loading="lazy"
@@ -181,7 +185,9 @@ export default component$(() => {
           id="speaking"
         >
           <div class="lg:max-w-5xl lg:mx-auto">
-            <h2 class="text-3xl text-my-blue">Speaking 🎙</h2>
+            <h2 class="text-3xl text-my-blue">
+              Speaking <span aria-hidden="true">🎙</span>
+            </h2>
             <div class="text-my-blue md:grid md:grid-cols-2 lg:gap-x-16">
               {[...talks]
                 .reverse()
@@ -195,15 +201,15 @@ export default component$(() => {
                     url={talk.url}
                   />
                 ))}
-              <p>
-                <a
-                  class="block mt-8 md:text-xl underline lg:text-2xl lg:mt-24 hover:no-underline"
-                  href="/talks"
-                >
-                  View all talks
-                </a>
-              </p>
             </div>
+            <p>
+              <a
+                class="block mt-8 md:text-xl underline lg:text-2xl lg:mt-24 hover:no-underline"
+                href="/talks"
+              >
+                View all talks
+              </a>
+            </p>
           </div>
         </section>
         <section
@@ -211,7 +217,9 @@ export default component$(() => {
           id="contact"
         >
           <div class="lg:max-w-5xl lg:mx-auto space-y-6 md:space-y-12">
-            <h2 class="text-3xl text-my-blue">Contact ✉️</h2>
+            <h2 class="text-3xl text-my-blue">
+              Contact <span aria-hidden="true">✉️</span>
+            </h2>
             <div class="flex flex-col md:flex-row">
               <p class="md:max-w-md">
                 You can send me an e-mail to{" "}

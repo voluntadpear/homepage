@@ -29,13 +29,15 @@ export default component$((props: Props) => {
         props.class ? ` ${props.class}` : ""
       }`}
     >
-      <p class="text-2xl py-2 border-b border-my-orange-dark pl-4 -mr-6 line-clamp-3">
-        {props.title}
-      </p>
-      {props.description ? (
-        <p class="pl-4 pt-1.5">{props.description}</p>
-      ) : null}
-      {props.url ? <Link url={props.url} showCTA={props.showCTA} /> : null}
+      <a href={props.url ?? undefined} class="group">
+        <p class="text-2xl py-2 border-b border-my-orange-dark pl-4 -mr-6 line-clamp-3 group-hover:underline">
+          {props.title}
+        </p>
+        {props.description ? (
+          <p class="pl-4 pt-1.5">{props.description}</p>
+        ) : null}
+        {props.url ? <Link url={props.url} showCTA={props.showCTA} /> : null}
+      </a>
     </article>
   );
 });
@@ -60,15 +62,17 @@ export const Link = component$((props: LinkProps) => {
 
   return (
     <p class="pl-4 font-medium mt-3">
-      <a href={url} class="flex justify-between items-center">
+      <span class="flex justify-between items-center">
         {props.showCTA ? (
           <span>
             Read post&nbsp;
-            {showDomain ? (
-              <ArrowExternal class="inline" />
-            ) : (
-              <Arrow class="inline" />
-            )}
+            <span aria-hidden="true">
+              {showDomain ? (
+                <ArrowExternal class="inline" />
+              ) : (
+                <Arrow class="inline" />
+              )}
+            </span>
           </span>
         ) : null}
         {showDomain ? (
@@ -76,7 +80,7 @@ export const Link = component$((props: LinkProps) => {
             {new URL(url).hostname}
           </span>
         ) : null}
-      </a>
+      </span>
     </p>
   );
 });
