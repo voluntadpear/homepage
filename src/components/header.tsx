@@ -13,9 +13,13 @@ export default component$(({ id }: { id?: string }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 69 1434 219.8"
-        class="bg-white -mt-px"
+        class="bg-white"
       >
-        <path d="m 0 96 C 1224 545 783 69 1434 69 H 0 Z" fill="#FFBF69" />
+        <path
+          d="m 0 96 C 1224 545 783 69 1434 69 H 0 Z"
+          fill="#FFBF69"
+          stroke="#FFBF69"
+        />
       </svg>
     </header>
   );
