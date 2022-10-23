@@ -17,8 +17,7 @@ export default [
     summary: "First part of me trying out SwiftUI as a React developer",
   },
   {
-    title:
-      "https://pspdfkit.com/blog/2020/intro-to-swiftui-for-react-developers-part-2/",
+    title: "Introduction to SwiftUI for React Developers (Part 2)",
     url: "https://pspdfkit.com/blog/2020/intro-to-swiftui-for-react-developers-part-2/",
     summary: "Second part of me trying out SwiftUi as a React developer",
   },
