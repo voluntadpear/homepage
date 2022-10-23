@@ -22,9 +22,9 @@ export default component$((props: Props) => {
           width="137"
           class="w-32 lg:w-52 object-contain object-top"
         />
-        <p class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline">
+        <h3 class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline">
           {props.title}
-        </p>
+        </h3>
         <p class="col-start-2 lg:col-start-1 lg:col-span-full">
           {props.description}
         </p>

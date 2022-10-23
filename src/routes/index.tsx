@@ -27,10 +27,10 @@ export default component$(() => {
     <>
       <Header id="top">
         <div class="lg:max-w-5xl lg:mx-auto">
-          <h1 class="text-5xl md:text-6xl text-my-blue text-center pt-36 md:pt-72">
-            Hi! I'm Guille!
+          <h1 class="text-3xl md:text-5xl text-my-blue text-center pt-36 md:pt-72">
+            Guillermo Peralta Scura
           </h1>
-          <p class="text-2xl md:text-3xl text-my-blue text-center mt-3.5 md:mt-6">
+          <p class="text-xl md:text-3xl text-my-blue text-center mt-3.5 md:mt-6">
             Front-end Developer
           </p>
           <div class="flex items-center justify-center space-x-4 md:space-x-8 my-6">
@@ -95,10 +95,9 @@ export default component$(() => {
               />
               <div>
                 <p class="pt-2 md:max-w-md">
-                  I’m Guillermo Peralta Scura, a web developer focused on the
-                  front-end. I enjoy building UIs and after some experience with
-                  different technologies, I’ve found the Web as my platform of
-                  choice.
+                  I’m a web developer focused on the front-end. I enjoy building
+                  UIs and after some experience with different technologies,
+                  I’ve found the Web as my platform of choice.
                 </p>
                 <p class="pt-4 md:max-w-md">
                   I’m part of the Web team at{" "}
