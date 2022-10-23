@@ -23,4 +23,12 @@ export default [
     title: "Why I don't use Netscape",
     url: "https://www.complang.tuwien.ac.at/anton/why-ancient-browsers.html",
   },
+  {
+    title: "Keynote: Why web tech is like this - Steve Sanderson",
+    url: "https://www.youtube.com/watch?v=3QEoJRjxnxQ",
+  },
+  {
+    title: "Plain Text - Dylan Beattie - NDC Copenhague 2022",
+    url: "https://www.youtube.com/watch?v=gd5uJ7Nlvvo",
+  },
 ];

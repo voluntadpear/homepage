@@ -51,6 +51,12 @@ export default [
     summary: "A guide on strategy to follow for determining browser bugs",
   },
   {
+    title: "Creating Images from Text on the Web Using Canvas",
+    url: "https://pspdfkit.com/blog/2021/creating-images-from-text-on-the-web/",
+    summary:
+      "An appraoch when you need to generate an image out of text from a HTML canvas",
+  },
+  {
     title: "Margin Collapsing in CSS",
     url: "https://pspdfkit.com/blog/2022/margin-collapsing-in-css/",
     summary:
