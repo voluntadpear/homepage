@@ -30,7 +30,7 @@ export default component$((props: Props) => {
       }`}
     >
       <a href={props.url ?? undefined} class="group">
-        <h3 class="text-2xl py-2 border-b border-my-orange-dark pl-4 -mr-6 line-clamp-3 group-hover:underline">
+        <h3 class="text-2xl py-2 border-b border-my-orange-dark px-4 -mr-6 line-clamp-3 group-hover:underline">
           {props.title}
         </h3>
         {props.description ? (
