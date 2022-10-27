@@ -31,4 +31,13 @@ export default [
     title: "Plain Text - Dylan Beattie - NDC Copenhague 2022",
     url: "https://www.youtube.com/watch?v=gd5uJ7Nlvvo",
   },
+  {
+    title: "Why I Love Tailwind",
+    url: "https://mxstbr.com/thoughts/tailwind/",
+  },
+  {
+    title:
+      "MemLab: An open source framework for finding JavaScript memory leaks",
+    url: "https://engineering.fb.com/2022/09/12/open-source/memlab/",
+  },
 ];

@@ -1,0 +1,49 @@
+.name {
+  animation: 1s ease-in 500ms slidein;
+  animation-fill-mode: forwards;
+  --amount: 30px;
+}
+
+.subtitle {
+  animation: 750ms linear 750ms slidein;
+  animation-fill-mode: forwards;
+  --amount: 15px;
+}
+
+.animated-icon {
+  animation: 750ms linear 950ms slidein;
+  animation-fill-mode: forwards;
+  --amount: calc(15px);
+}
+
+.icon-wrapper:nth-child(1) .animated-icon {
+  animation-delay: 950ms;
+}
+
+.icon-wrapper:nth-child(2) .animated-icon {
+  animation-delay: 1150ms;
+}
+
+.icon-wrapper:nth-child(3) .animated-icon {
+  animation-delay: 1350ms;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateY(var(--amount));
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .name,
+  .subtitle,
+  .animated-icon {
+    animation: none;
+  }
+}

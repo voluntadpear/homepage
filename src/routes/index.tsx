@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import Card from "~/components/card";
 import CtaButton from "~/components/cta-button";
@@ -9,6 +9,7 @@ import bookmarks from "~/content/bookmarks";
 import { extractFrontmatter } from "~/content/local-posts";
 import posts from "~/content/posts";
 import talks from "~/content/talks";
+import animation from "~/lib/animation.css";
 
 export default component$(() => {
   const latestPosts = [...posts]
@@ -23,27 +24,32 @@ export default component$(() => {
       }
     });
 
+  useStylesScoped$(animation);
+
   return (
     <>
       <Header id="top">
         <div class="lg:max-w-5xl lg:mx-auto">
-          <h1 class="text-3xl md:text-5xl text-my-blue text-center pt-36 md:pt-72">
+          <h1 class="text-3xl md:text-5xl text-my-blue text-center pt-36 md:pt-72 opacity-0 name motion-reduce:opacity-100">
             Guillermo Peralta Scura
           </h1>
-          <p class="text-xl md:text-3xl text-my-blue text-center mt-3.5 md:mt-6">
+          <p class="text-xl md:text-3xl text-my-blue text-center mt-3.5 md:mt-6 opacity-0 subtitle motion-reduce:opacity-100">
             Front-end Developer
           </p>
           <div class="flex items-center justify-center space-x-4 md:space-x-8 my-6">
-            <a href="https://github.com/voluntadpear">
-              <GitHub class="w-6 h-6 md:w-8 md:h-8" />
+            <a href="https://github.com/voluntadpear" class="icon-wrapper">
+              <GitHub class="w-6 h-6 md:w-8 md:h-8 opacity-0 animated-icon motion-reduce:opacity-100" />
               <span class="sr-only">My GitHub</span>
             </a>
-            <a href="https://twitter.com/voluntadpear">
-              <Twitter class="w-6 h-6 md:w-8 md:h-8" />
+            <a href="https://twitter.com/voluntadpear" class="icon-wrapper">
+              <Twitter class="w-6 h-6 md:w-8 md:h-8 opacity-0 animated-icon motion-reduce:opacity-100" />
               <span class="sr-only">My Twitter</span>
             </a>
-            <a href="https://www.linkedin.com/in/guillermo-peralta-scura-00a852103/">
-              <LinkedIn class="w-6 h-6 md:w-8 md:h-8" />
+            <a
+              href="https://www.linkedin.com/in/guillermo-peralta-scura-00a852103/"
+              class="icon-wrapper"
+            >
+              <LinkedIn class="w-6 h-6 md:w-8 md:h-8 opacity-0 animated-icon motion-reduce:opacity-100" />
               <span class="sr-only">My LinkedIn</span>
             </a>
           </div>
