@@ -38,18 +38,18 @@ export default component$(() => {
           </p>
           <div class="flex items-center justify-center space-x-4 md:space-x-8 my-6">
             <a href="https://github.com/voluntadpear" class="icon-wrapper">
-              <GitHub class="w-6 h-6 md:w-8 md:h-8 opacity-0 animated-icon motion-reduce:opacity-100" />
+              <GitHub class="w-6 h-6 md:w-8 md:h-8" />
               <span class="sr-only">My GitHub</span>
             </a>
             <a href="https://twitter.com/voluntadpear" class="icon-wrapper">
-              <Twitter class="w-6 h-6 md:w-8 md:h-8 opacity-0 animated-icon motion-reduce:opacity-100" />
+              <Twitter class="w-6 h-6 md:w-8 md:h-8" />
               <span class="sr-only">My Twitter</span>
             </a>
             <a
               href="https://www.linkedin.com/in/guillermo-peralta-scura-00a852103/"
               class="icon-wrapper"
             >
-              <LinkedIn class="w-6 h-6 md:w-8 md:h-8 opacity-0 animated-icon motion-reduce:opacity-100" />
+              <LinkedIn class="w-6 h-6 md:w-8 md:h-8" />
               <span class="sr-only">My LinkedIn</span>
             </a>
           </div>
