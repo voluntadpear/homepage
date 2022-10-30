@@ -15,7 +15,6 @@ export const RouterHead = component$(() => {
       <link rel="canonical" href={loc.href} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <meta property="og:site_name" content="Guillermo Peralta Scura" />
       <meta property="og:type" content="website" />
       <meta name="twitter:site" content="Guillermo Peralta Scura" />
       <meta name="twitter:card" content="summary_large_image" />
