@@ -30,7 +30,7 @@ export default component$(() => {
     <>
       <Header id="top">
         <div class="lg:max-w-5xl lg:mx-auto">
-          <h1 class="text-3xl md:text-5xl text-my-blue text-center pt-36 md:pt-72 opacity-0 name motion-reduce:opacity-100">
+          <h1 class="text-3xl md:text-5xl text-my-blue text-center mt-36 md:mt-72 opacity-0 name motion-reduce:opacity-100">
             Guillermo Peralta Scura
           </h1>
           <p class="text-xl md:text-3xl text-my-blue text-center mt-3.5 md:mt-6 opacity-0 subtitle motion-reduce:opacity-100">
