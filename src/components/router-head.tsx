@@ -22,6 +22,20 @@ export const RouterHead = component$(() => {
         <meta {...m} />
       ))}
 
+      {!head.meta.some((m) => m.property === "og:image") ? (
+        <meta
+          property="og:image"
+          content={`https://${process.env.DOMAIN}/og-fallback.png`}
+        />
+      ) : null}
+
+      {!head.meta.some((m) => m.name === "twitter:image") ? (
+        <meta
+          name="twitter:image"
+          content={`https://${process.env.DOMAIN}/og-fallback.png`}
+        />
+      ) : null}
+
       {head.links.map((l) => (
         <link {...l} />
       ))}
