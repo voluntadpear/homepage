@@ -33,7 +33,7 @@ export const MobileMenu = component$(() => {
   });
 
   return state.menuVisible ? (
-    <div class="fixed inset-0 bg-white/80 backdrop-blur wk-backdrop-blur">
+    <div class="fixed inset-0 bg-white/80 backdrop-blur wk-backdrop-blur z-10">
       <button
         class="fixed w-12 h-12 right-8 top-6"
         type="button"
