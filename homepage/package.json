@@ -17,8 +17,8 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^0.11.1",
-    "@builder.io/qwik-city": "0.0.112",
+    "@builder.io/qwik": "^0.12.1",
+    "@builder.io/qwik-city": "0.0.118",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.7",
     "@types/eslint": "8.4.6",

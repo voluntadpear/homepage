@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { extractFrontmatter } from "~/content/local-posts";
+import { useDocumentHead } from "@builder.io/qwik-city";
 
 type Props = {
   url: string;
@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default component$((props: Props) => {
-  const fm = extractFrontmatter(props.url);
+  const head = useDocumentHead()
 
   return (
     <header
@@ -16,9 +16,9 @@ export default component$((props: Props) => {
       }`}
     >
       <h2 class="text-3xl md:text-4xl py-2 border-b border-my-orange-dark pl-4">
-        {fm.title}
+        {head.title}
       </h2>
-      <p class="pl-4 py-4">{fm.summary}</p>
+      <p class="pl-4 py-4">{head.frontmatter.summary}</p>
     </header>
   );
 });
