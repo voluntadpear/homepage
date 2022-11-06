@@ -1,6 +1,6 @@
 {
-  "name": "Blank",
-  "description": "Blank Qwik starter app.",
+  "name": "scura.dev",
+  "description": "Implementation of https://scura.dev",
   "private": true,
   "scripts": {
     "build": "npm run typecheck && npm run build.client && npm run build.ssg && DOMAIN=goshi.dev node server/entry.ssg.js",
