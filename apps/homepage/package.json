@@ -1,0 +1,38 @@
+{
+  "name": "scura.dev",
+  "description": "Implementation of https://scura.dev",
+  "private": true,
+  "scripts": {
+    "build": "npm run typecheck && npm run build.client && npm run build.server",
+    "build.client": "vite build",
+    "build.preview": "vite build --ssr src/entry.preview.tsx",
+    "build.server": "DOMAIN=scura.dev vite build -c adaptors/static/vite.config.ts",
+    "dev": "vite --mode ssr",
+    "fmt": "prettier --write .",
+    "fmt.check": "prettier --check .",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "preview": "qwik build preview && vite preview",
+    "start": "vite --mode ssr",
+    "typecheck": "tsc --incremental --noEmit",
+    "qwik": "qwik"
+  },
+  "devDependencies": {
+    "@builder.io/qwik": "^0.12.1",
+    "@builder.io/qwik-city": "0.0.118",
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "@tailwindcss/typography": "^0.5.7",
+    "@types/eslint": "8.4.6",
+    "@types/node": "latest",
+    "@typescript-eslint/eslint-plugin": "5.37.0",
+    "@typescript-eslint/parser": "5.37.0",
+    "eslint": "8.23.1",
+    "eslint-plugin-qwik": "0.0.109",
+    "front-matter": "^4.0.2",
+    "node-fetch": "3.2.10",
+    "prettier": "2.7.1",
+    "tailwindcss": "^3.1.8",
+    "typescript": "4.8.3",
+    "vite": "3.1.7",
+    "vite-tsconfig-paths": "3.5.1"
+  }
+}
