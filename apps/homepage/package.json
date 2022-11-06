@@ -3,10 +3,10 @@
   "description": "Implementation of https://scura.dev",
   "private": true,
   "scripts": {
-    "build": "npm run typecheck && npm run build.client && npm run build.ssg && DOMAIN=goshi.dev node server/entry.ssg.js",
+    "build": "npm run typecheck && npm run build.client && npm run build.server",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
-    "build.ssg": "vite build --ssr src/entry.ssg.ts",
+    "build.server": "DOMAIN=scura.dev vite build -c adaptors/static/vite.config.ts",
     "dev": "vite --mode ssr",
     "fmt": "prettier --write .",
     "fmt.check": "prettier --check .",

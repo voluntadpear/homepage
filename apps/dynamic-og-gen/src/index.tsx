@@ -8,7 +8,7 @@ import { extractFrontmatter, posts } from "posts";
 // const quicksand = await fs.
 async function generateSVG(title: string, ogImgPath: string) {
   const quicksand = await fs.readFile(
-    path.join(__dirname, "quicksand.otf")
+    path.join(__dirname, "..", "quicksand.otf")
   );
 
   const svg = await satori(

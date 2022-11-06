@@ -9,7 +9,8 @@
     "packages/posts"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npm run build --workspace=packages/posts && npm run dev --workspace=apps/homepage",
+    "build": "npm run build --workspace=packages/posts && npm run build --workspace=apps/homepage && npm run build --workspace=apps/dynamic-og-gen && node apps/dynamic-og-gen/dist/index.cjs"
   },
   "repository": {
     "type": "git",

@@ -35,4 +35,5 @@ lerna-debug.log*
 # Yarn
 .yarn/*
 !.yarn/releases
-public/og
+public/og/*
+!public/og/.gitkeep
