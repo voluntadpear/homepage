@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "workspaces": [
-    "homepage",
-    "dynamic-og-gen"
+    "apps/homepage",
+    "apps/dynamic-og-gen",
+    "packages/posts"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,0 +1,11 @@
+{
+    "name": "posts",
+    "main": "./dist/index.mjs",
+    "scripts": {
+        "build": "tsup ./index.ts --format esm"
+    },
+    "devDependencies": {
+        "front-matter": "^4.0.2",
+        "tsup": "^6.4.0"
+    }
+}
