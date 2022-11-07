@@ -23,6 +23,7 @@ export default component$(() => {
             description={post.summary!}
             url={"url" in post ? post.url : undefined}
             showCTA
+            tag="h2"
           />
         ))}
       </div>

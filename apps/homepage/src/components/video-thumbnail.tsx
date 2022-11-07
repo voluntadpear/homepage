@@ -6,9 +6,12 @@ type Props = {
   thumbnailSrc: string;
   url: string;
   class?: string;
+  tag?: "h2" | "h3"
 };
 
 export default component$((props: Props) => {
+  const {tag: Tag = "h3"} = props
+
   return (
     <article class={props.class}>
       <a
@@ -22,9 +25,9 @@ export default component$((props: Props) => {
           width="137"
           class="w-32 lg:w-52 object-contain object-top"
         />
-        <h3 class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline">
+        <Tag class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline">
           {props.title}
-        </h3>
+        </Tag>
         <p class="col-start-2 lg:col-start-1 lg:col-span-full">
           {props.description}
         </p>

@@ -13,6 +13,7 @@ export default component$(() => {
             description={talk.description}
             thumbnailSrc={talk.thumbnail}
             url={talk.url}
+            tag="h2"
           />
         ))}
       </div>

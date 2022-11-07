@@ -20,9 +20,12 @@ type Props = {
   title: string;
   class?: string;
   description?: string;
+  tag?: "h2" | "h3"
 } & (NoURLProps | OnlyURLProps | CTAURLProps);
 
 export default component$((props: Props) => {
+  const {tag: Tag = "h3"} = props
+
   return (
     <article
       class={`border border-my-orange-dark rounded-lg text-my-blue-dark pb-2.5 pr-6${
@@ -30,9 +33,9 @@ export default component$((props: Props) => {
       }`}
     >
       <a href={props.url ?? undefined} class="group">
-        <h3 class="text-2xl py-2 border-b border-my-orange-dark px-4 -mr-6 line-clamp-3 group-hover:underline">
+        <Tag class="text-2xl py-2 border-b border-my-orange-dark px-4 -mr-6 line-clamp-3 group-hover:underline">
           {props.title}
-        </h3>
+        </Tag>
         {props.description ? (
           <p class="pl-4 pt-1.5">{props.description}</p>
         ) : null}
