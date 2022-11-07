@@ -7,9 +7,9 @@ export default component$(({ id }: { id?: string }) => {
     <header id={id}>
       <MobileMenu />
       <DesktopMenu />
-      <header class="bg-my-orange-light pb-12 snap-start">
+      <div class="bg-my-orange-light pb-12 snap-start">
         <Slot />
-      </header>
+      </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 69 1434 219.8"
