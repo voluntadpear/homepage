@@ -7,6 +7,13 @@ import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
 export const RouterHead = component$(() => {
   const head = useDocumentHead();
   const loc = useLocation();
+  let description =
+    head.meta.find((m) => m.name === "description")?.content ??
+    "Web developer that likes to tackle challenges, learn from them, write about them, and have fun while in the process!";
+
+  if (head.frontmatter?.summary) {
+    description = head.frontmatter.summary;
+  }
 
   return (
     <>
@@ -27,22 +34,9 @@ export const RouterHead = component$(() => {
         <meta {...m} />
       ))}
 
-      {!head.meta.some((m) => m.name === "description") ? (
-        <>
-          <meta
-            name="description"
-            content="Web developer that likes to tackle challenges, learn from them, write about them, and have fun while in the process!"
-          />
-          <meta
-            property="og:description"
-            content="Web developer that likes to tackle challenges, learn from them, write about them, and have fun while in the process!"
-          />
-          <meta
-            name="twitter:description"
-            content="Web developer that likes to tackle challenges, learn from them, write about them, and have fun while in the process!"
-          />
-        </>
-      ) : null}
+      <meta name="description" content={description} />
+      <meta property="og:description" content={description} />
+      <meta name="twitter:description" content={description} />
 
       {!head.meta.some((m) => m.property === "og:image") ? (
         <>
