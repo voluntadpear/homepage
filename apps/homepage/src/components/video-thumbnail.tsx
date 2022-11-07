@@ -24,6 +24,7 @@ export default component$((props: Props) => {
           height="72"
           width="137"
           class="w-32 lg:w-52 object-contain object-top"
+          loading="lazy"
         />
         <Tag class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline">
           {props.title}
