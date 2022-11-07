@@ -22,6 +22,10 @@ export const RouterHead = component$(() => {
       <link rel="canonical" href={loc.href} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      { /* @ts-expect-error */ }
+      <link rel="preload" href="/quicksand-v30-latin-ext_latin-regular.woff2" as="font" type="font/woff2" crossorigin />
+      { /* @ts-expect-error */ }
+      <link rel="preload" href="/quicksand-v30-latin-ext_latin-300.woff2" as="font" type="font/woff2" crossorigin />
       <meta property="og:type" content="website" />
       <meta name="twitter:site" content="Guillermo Peralta Scura" />
       <meta name="twitter:card" content="summary_large_image" />
