@@ -37,6 +37,7 @@ async function generateSVG(title: string, ogImgPath: string) {
           style={{
             fontSize: 72,
             paddingLeft: "100px",
+            paddingTop: "20px",
             paddingRight: "100px",
             textAlign: "center",
             marginBottom: "50px",
