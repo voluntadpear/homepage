@@ -1,8 +1,7 @@
 {
-  "name": "homepage",
+  "name": "homepage-monorepo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "workspaces": [
     "apps/homepage",
     "apps/dynamic-og-gen",
