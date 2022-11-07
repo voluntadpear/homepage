@@ -2,8 +2,10 @@
 
 URL: [https://scura.dev](https://scura.dev)
 
-## Static Site Generator (Node.js)
+## Development
 
-```
-npm run ssg
-```
+- Run `npm run dev`
+
+## Build
+
+- Run `npm run build`
