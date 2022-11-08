@@ -38,7 +38,7 @@ export function extractFrontmatter(url: string) {
 
   const frontMatter = fm<Frontmatter>(rawPost).attributes;
 
-  return frontMatter;
+  return {...frontMatter, url};
 }
 
 type Frontmatter = {
