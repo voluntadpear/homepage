@@ -40,4 +40,8 @@ export default [
       "MemLab: An open source framework for finding JavaScript memory leaks",
     url: "https://engineering.fb.com/2022/09/12/open-source/memlab/",
   },
+  {
+    title: "Which SVG technique performs best for way too many icons?",
+    url: "https://cloudfour.com/thinks/svg-icon-stress-test/"
+  }
 ];
