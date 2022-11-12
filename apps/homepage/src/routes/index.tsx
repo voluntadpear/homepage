@@ -53,8 +53,8 @@ export default component$(() => {
             </a>
           </div>
           <p class="text-lg text-my-blue-dark w-56 md:w-72 mt-14 lg:mt-24 ml-4 md:ml-14 lg:text-3xl lg:font-light lg:ml-0 lg:w-[26rem]">
-            I like to tackle challenges, learn from them, write about them, and
-            have fun while in the process!
+            I like to overcome challenges, learn tremendously from them, write
+            meticulously about them, and have fun in the process!
           </p>
         </div>
       </Header>
@@ -99,24 +99,31 @@ export default component$(() => {
               />
               <div>
                 <p class="pt-2 md:max-w-md">
-                  I’m a web developer focused on the front-end. I enjoy building
-                  UIs and after some experience with different technologies,
-                  I’ve found the Web as my platform of choice.
+                  I’m a web developer who focuses on the front-end. I enjoy
+                  building UIs, and after some experience experimenting with
+                  different technologies, I’ve found the web as my platform of
+                  choice.
                 </p>
                 <p class="pt-4 md:max-w-md">
                   I’m part of the Web team at{" "}
-                  <span class="font-semibold">PSPDFKit</span>, where I’ve been
-                  involved in adding new features to the SDK, coordinating with
-                  other teams, and mentoring other co-workers, across areas such
-                  as support, sales, and development. Take a look at the public
-                  demo of this platform.
+                  <span class="font-semibold">PSPDFKit</span>, where I add new
+                  features to the SDK, coordinate with other teams, and mentor
+                  other co-workers across areas such as support, sales, and
+                  development.{" "}
+                  <a
+                    href="https://pspdfkit.com/demo"
+                    class="underline hover:no-underline"
+                  >
+                    Take a look at the public demo
+                  </a>{" "}
+                  of this platform.
                 </p>
                 <p class="pt-4 md:max-w-md">
-                  The Web can run on multiple devices and under a single
-                  codebase. You have competing engines and end-user browsers
-                  competing and bringing new features all the time, plus, it’s
-                  constantly evolving and having new features being added to it
-                  all the time. It never stops being an exciting area to be in!
+                  The web can run on multiple devices and under a single
+                  codebase. You have competing engines and end-user browsers.
+                  Plus, it’s constantly evolving and has new features being
+                  added to it all the time. It never stops being an exciting
+                  area in which to be involved!
                 </p>
               </div>
             </div>
@@ -158,12 +165,12 @@ export default component$(() => {
             </h2>
             <div class="ml-4 md:ml-0 md:max-w-md lg:max-w-lg">
               <p>
-                Links from around the Web that I find useful for work, or they
-                are interesting reads, or whatever...
+                Links from around the web that I find useful for work, or are
+                interesting reads, or whatever else...
               </p>
               <p>
-                This is all for my personal use but I’m deciding to make them
-                public because why not! They can be useful for someone else 🤷🏻‍♂️
+                These are all for personal use, but I’m deciding to make them
+                public because why not! They may be useful for someone else. 🤷🏻‍♂️
               </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 md:gap-x-9 lg:gap-x-36 gap-y-6 md:gap-y-16 mx-2 md:mx-0">
