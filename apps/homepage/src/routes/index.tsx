@@ -8,7 +8,7 @@ import VideoThumbnail from "~/components/video-thumbnail";
 import bookmarks from "~/content/bookmarks";
 import { extractFrontmatter, posts } from "posts";
 import talks from "~/content/talks";
-import animation from "~/lib/animation.css";
+import animation from "~/lib/animation.css?inline";
 
 export default component$(() => {
   const latestPosts = [...posts]
