@@ -27,7 +27,7 @@ export default component$(() => {
 
   return (
     <>
-      <Header id="top">
+      <Header id="top" contentId="latest-posts">
         <div class="lg:max-w-5xl lg:mx-auto">
           <h1 class="text-3xl md:text-5xl text-my-blue text-center mt-36 md:mt-72 opacity-0 name motion-reduce:opacity-100">
             Guillermo Peralta Scura
@@ -61,7 +61,7 @@ export default component$(() => {
       <main>
         <section class="bg-white md:py-52" id="posts">
           <div class="lg:max-w-5xl lg:mx-auto flex flex-col space-y-6">
-            <h2 class="mt-24 md:my-24 ml-4 md:ml-10 text-3xl text-my-blue lg:text-4xl lg:ml-0">
+            <h2 class="mt-24 md:my-24 ml-4 md:ml-10 text-3xl text-my-blue lg:text-4xl lg:ml-0" id="latest-posts" tabindex={-1}>
               Latest posts <span aria-hidden="true">✨</span>
             </h2>
             <div class="mx-3 md:mx-6 space-y-6 md:grid md:grid-cols-2 md:space-y-0 md:gap-x-7 lg:gap-x-12 md:gap-y-12 lg:mx-0">
@@ -209,6 +209,7 @@ export default component$(() => {
                     description={talk.description}
                     thumbnailSrc={talk.thumbnail}
                     url={talk.url}
+                    lang={talk.lang}
                   />
                 ))}
             </div>

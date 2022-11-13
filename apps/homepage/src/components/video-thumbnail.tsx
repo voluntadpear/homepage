@@ -6,11 +6,12 @@ type Props = {
   thumbnailSrc: string;
   url: string;
   class?: string;
-  tag?: "h2" | "h3"
+  tag?: "h2" | "h3";
+  lang?: "es" | "en";
 };
 
 export default component$((props: Props) => {
-  const {tag: Tag = "h3"} = props
+  const { tag: Tag = "h3" } = props;
 
   return (
     <article class={props.class}>
@@ -26,7 +27,10 @@ export default component$((props: Props) => {
           class="w-32 lg:w-52 object-contain object-top"
           loading="lazy"
         />
-        <Tag class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline">
+        <Tag
+          class="text-lg font-semibold lg:text-3xl lg:font-normal group-hover:underline"
+          lang={props.lang === "es" ? "es" : undefined}
+        >
           {props.title}
         </Tag>
         <p class="col-start-2 lg:col-start-1 lg:col-span-full">

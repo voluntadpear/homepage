@@ -2,9 +2,10 @@ import { component$, Slot, useContext, $ } from "@builder.io/qwik";
 import { MenuContext } from "~/root";
 import { Close, Hamburger } from "./icons/qwik";
 
-export default component$(({ id }: { id?: string }) => {
+export default component$(({ id, contentId }: { id?: string, contentId: string }) => {
   return (
     <header id={id}>
+      <a href={`#${contentId}`} class="sr-only bg-white text-my-blue focus:px-8 focus:py-2 focus:not-sr-only focus:absolute focus:top-4 focus:left-4">Skip to content</a>
       <MobileMenu />
       <DesktopMenu />
       <div class="bg-my-orange-light pb-12 snap-start">
