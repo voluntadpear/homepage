@@ -161,7 +161,7 @@ export default component$(() => {
         >
           <div class="lg:max-w-5xl lg:mx-auto flex flex-col space-y-8">
             <h2 class="mt-7 ml-4 md:ml-0 md:mt-0 text-3xl text-my-blue">
-              My Bookmarks 🔖
+              My Bookmarks <span aria-hidden="true">🔖</span>
             </h2>
             <div class="ml-4 md:ml-0 md:max-w-md lg:max-w-lg">
               <p>

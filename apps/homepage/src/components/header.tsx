@@ -86,27 +86,51 @@ export const DesktopMenu = component$(() => {
 
 export const menuItems = [
   {
-    label: "Home 🏠",
+    label: (
+      <span>
+        Home <span aria-hidden="true">🏠</span>
+      </span>
+    ),
     url: "/#top",
   },
   {
-    label: "Latest Posts ✨",
+    label: (
+      <span>
+        Latest Posts <span aria-hidden="true">✨</span>
+      </span>
+    ),
     url: "/#posts",
   },
   {
-    label: "About Me 👋",
+    label: (
+      <span>
+        About Me <span aria-hidden="true">👋</span>
+      </span>
+    ),
     url: "/#about",
   },
   {
-    label: "My Bookmarks 🔖",
+    label: (
+      <span>
+        My Bookmarks <span aria-hidden="true">🔖</span>
+      </span>
+    ),
     url: "/#bookmarks",
   },
   {
-    label: "Speaking 🎙",
+    label: (
+      <span>
+        Speaking <span aria-hidden="true">🎙</span>
+      </span>
+    ),
     url: "/#speaking",
   },
   {
-    label: "Contact ✉️",
+    label: (
+      <span>
+        Contact <span aria-hidden="true">✉️</span>
+      </span>
+    ),
     url: "/#contact",
   },
 ] as const;
