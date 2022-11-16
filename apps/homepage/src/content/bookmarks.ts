@@ -51,5 +51,9 @@ export default [
   {
     title: "A Comprehensive Guide to Font Loading Strategies",
     url: "https://www.zachleat.com/web/comprehensive-webfonts/"
+  },
+  {
+    title: "View Transitions API Explainer",
+    url: "https://github.com/WICG/view-transitions/blob/main/explainer.md"
   }
 ];
