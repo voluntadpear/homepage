@@ -42,6 +42,14 @@ export default [
   },
   {
     title: "Which SVG technique performs best for way too many icons?",
-    url: "https://cloudfour.com/thinks/svg-icon-stress-test/"
+    url: "https://cloudfour.com/thinks/svg-icon-stress-test/",
+  },
+  {
+    title: "Trailing Slashes on URLs: Contentious or Settled?",
+    url: "https://www.zachleat.com/web/trailing-slash/",
+  },
+  {
+    title: "A Comprehensive Guide to Font Loading Strategies",
+    url: "https://www.zachleat.com/web/comprehensive-webfonts/"
   }
 ];
