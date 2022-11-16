@@ -19,7 +19,7 @@ export default component$(() => {
         new URL(post.url);
         return post;
       } catch (error) {
-        return extractFrontmatter(post.url);
+        return { ...extractFrontmatter(post.url), url: `/blog${post.url}` };
       }
     });
 
@@ -61,7 +61,11 @@ export default component$(() => {
       <main>
         <section class="bg-white md:py-52" id="posts">
           <div class="lg:max-w-5xl lg:mx-auto flex flex-col space-y-6">
-            <h2 class="mt-24 md:my-24 ml-4 md:ml-10 text-3xl text-my-blue lg:text-4xl lg:ml-0" id="latest-posts" tabIndex={-1}>
+            <h2
+              class="mt-24 md:my-24 ml-4 md:ml-10 text-3xl text-my-blue lg:text-4xl lg:ml-0"
+              id="latest-posts"
+              tabIndex={-1}
+            >
               Latest posts <span aria-hidden="true">✨</span>
             </h2>
             <div class="mx-3 md:mx-6 space-y-6 md:grid md:grid-cols-2 md:space-y-0 md:gap-x-7 lg:gap-x-12 md:gap-y-12 lg:mx-0">
