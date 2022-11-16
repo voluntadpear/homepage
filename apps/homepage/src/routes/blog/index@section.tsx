@@ -9,7 +9,7 @@ export default component$(() => {
       new URL(post.url);
       return post;
     } catch (error) {
-      return extractFrontmatter(post.url);
+      return { ...extractFrontmatter(post.url), url: `/blog${post.url}` };
     }
   });
 
