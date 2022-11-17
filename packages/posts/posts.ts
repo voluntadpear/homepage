@@ -24,13 +24,13 @@ export default [
   {
     title: "Open PDFs in a Svelte App with PSPDFKit",
     url: "https://pspdfkit.com/blog/2019/open-pdfs-in-a-svelte-app-with-pspdfkit/",
-    summary: "A tutorial to how to use PSPDFKit with Svelte",
+    summary: "A tutorial on how to use PSPDFKit with Svelte",
   },
   {
     title: "How We're Improving Accessibility on PSPDFKit for Web",
     url: "https://pspdfkit.com/blog/2020/how-we-are-improving-accessibility-on-web/",
     summary:
-      "A description of different changes I made to PSPDFKit for Web for accessibiltity improvements",
+      "A description of different accessibility improvements I implemented to the PSPDFKit for Web SDK",
   },
   {
     title: "Text Selection Regression in Chrome 83",
@@ -47,18 +47,18 @@ export default [
   {
     title: "How to Identify Browser Bugs",
     url: "https://pspdfkit.com/blog/2021/how-to-identify-browser-bugs/",
-    summary: "A guide on strategy to follow for determining browser bugs",
+    summary: "My strategy to follow for discovering and reporting browser bugs",
   },
   {
     title: "Creating Images from Text on the Web Using Canvas",
     url: "https://pspdfkit.com/blog/2021/creating-images-from-text-on-the-web/",
     summary:
-      "An appraoch when you need to generate an image out of text from a HTML canvas",
+      "A technique I use when I need to generate an image out of text from an HTML canvas",
   },
   {
     title: "Margin Collapsing in CSS",
     url: "https://pspdfkit.com/blog/2022/margin-collapsing-in-css/",
     summary:
-      "A description on non intuitive ways that margin collapsing impacts our layout",
+      "A description of nonintuitive ways that margin collapsing impacts our layout",
   },
 ];

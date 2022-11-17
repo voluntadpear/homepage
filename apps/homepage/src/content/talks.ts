@@ -2,7 +2,7 @@ export default [
   {
     title: "Meetup Mayo 2020 JavaScript Py",
     description:
-      "Meetup that I co-organized and in which I made a talk about accessibility in React apps (Spanish)",
+      "A meetup that I co-organized and in which I made a talk about accessibility in React apps (Spanish)",
     thumbnail: "/video1.webp",
     url: "https://www.youtube.com/watch?v=kV-M3aZ3y9c",
     lang: "es",
@@ -10,7 +10,7 @@ export default [
   {
     title: "Trabajo remoto desde Paraguay",
     description:
-      "A talk in Spanish I did describing my experience as a remote worker from Paraguay",
+      "A talk in which I described my experience as a remote worker from Paraguay (Spanish)",
     thumbnail: "/video3.webp",
     url: "https://youtu.be/fZUY6RBZfMg?t=2633",
     lang: "es"
