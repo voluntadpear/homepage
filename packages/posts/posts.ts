@@ -59,6 +59,6 @@ export default [
     title: "Margin Collapsing in CSS",
     url: "https://pspdfkit.com/blog/2022/margin-collapsing-in-css/",
     summary:
-      "A description of nonintuitive ways that margin collapsing impacts our layout",
+      "A description of nonintuitive ways in which margin collapsing impacts our layout",
   },
 ];
