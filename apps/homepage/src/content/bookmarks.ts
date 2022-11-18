@@ -55,5 +55,9 @@ export default [
   {
     title: "View Transitions API Explainer",
     url: "https://github.com/WICG/view-transitions/blob/main/explainer.md"
+  },
+  {
+    title: "Laws of UX",
+    url: "https://lawsofux.com/"
   }
 ];
