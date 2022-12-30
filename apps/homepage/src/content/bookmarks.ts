@@ -59,5 +59,9 @@ export default [
   {
     title: "Laws of UX",
     url: "https://lawsofux.com/"
+  },
+  {
+    title: "Making the world’s fastest website, and other mistakes",
+    url: "https://dev.to/tigt/making-the-worlds-fastest-website-and-other-mistakes-56na"
   }
 ];
