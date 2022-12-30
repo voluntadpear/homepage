@@ -23,4 +23,11 @@ export default [
     url: "https://www.youtube.com/watch?v=GhvStHDIuto",
     lang: "en"
   },
+  {
+    title: "Editing text in a PDF with PSPDFKit's content editor",
+    description: "Live webinar in which I introduced the PDF Content Editor feature I've helped building",
+    thumbnail: "/video4.webp",
+    url: "https://www.youtube.com/watch?v=aMkbGE2Wnfc",
+    lang: "en"
+  }
 ] as const;
