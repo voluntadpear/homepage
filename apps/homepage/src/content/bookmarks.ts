@@ -63,5 +63,9 @@ export default [
   {
     title: "Making the world’s fastest website, and other mistakes",
     url: "https://dev.to/tigt/making-the-worlds-fastest-website-and-other-mistakes-56na"
+  },
+  {
+    title: "26 programming languages in 25 days: Reflections on language design",
+    url: "https://matt.might.net/articles/26-languages-part2/"
   }
 ];
