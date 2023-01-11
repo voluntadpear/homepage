@@ -67,5 +67,13 @@ export default [
   {
     title: "26 programming languages in 25 days: Reflections on language design",
     url: "https://matt.might.net/articles/26-languages-part2/"
+  },
+  {
+    title: "The gotcha of unhandled promise rejections",
+    url: "https://jakearchibald.com/2023/unhandled-rejections/"
+  },
+  {
+    title: "Our top Core Web Vitals recommendations for 2023",
+    url: "https://web.dev/top-cwv-2023/"
   }
 ];
