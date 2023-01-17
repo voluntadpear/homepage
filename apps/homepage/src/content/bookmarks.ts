@@ -75,5 +75,9 @@ export default [
   {
     title: "Our top Core Web Vitals recommendations for 2023",
     url: "https://web.dev/top-cwv-2023/"
+  },
+  {
+    title: "Fixing a Memory Leak in a Production Node.js App",
+    url: "https://kentcdodds.com/blog/fixing-a-memory-leak-in-a-production-node-js-app"
   }
 ];
