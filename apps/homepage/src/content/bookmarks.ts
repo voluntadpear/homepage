@@ -79,5 +79,9 @@ export default [
   {
     title: "Fixing a Memory Leak in a Production Node.js App",
     url: "https://kentcdodds.com/blog/fixing-a-memory-leak-in-a-production-node-js-app"
+  },
+  {
+    title: "A beginner’s guide to Chrome tracing",
+    url: "https://nolanlawson.com/2022/10/26/a-beginners-guide-to-chrome-tracing/"
   }
 ];
