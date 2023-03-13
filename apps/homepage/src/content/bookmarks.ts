@@ -87,5 +87,9 @@ export default [
   {
     title: "Streams—The definitive guide",
     url: "https://web.dev/streams"
+  },
+  {
+    title: "Smooth and simple transitions with the View Transitions API",
+    url: "https://developer.chrome.com/docs/web-platform/view-transitions/"
   }
 ];
