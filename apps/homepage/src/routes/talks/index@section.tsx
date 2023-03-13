@@ -15,6 +15,7 @@ export default component$(() => {
             url={talk.url}
             lang={talk.lang}
             tag="h2"
+            key={talk.url}
           />
         ))}
       </div>

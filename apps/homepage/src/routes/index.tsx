@@ -75,6 +75,7 @@ export default component$(() => {
                   description={post.summary!}
                   url={post.url}
                   showCTA
+                  key={post.url}
                 />
               ))}
               <p class="text-lg pl-4 md:pl-2 md:text-xl underline hover:no-underline text-my-blue md:col-span-full lg:text-2xl pb-8 md:pb-24 md:pt-8">
@@ -186,6 +187,7 @@ export default component$(() => {
                     title={bookmark.title}
                     url={bookmark.url}
                     showCTA={false}
+                    key={bookmark.url}
                   />
                 ))}
             </div>
@@ -214,6 +216,7 @@ export default component$(() => {
                     thumbnailSrc={talk.thumbnail}
                     url={talk.url}
                     lang={talk.lang}
+                    key={talk.url}
                   />
                 ))}
             </div>

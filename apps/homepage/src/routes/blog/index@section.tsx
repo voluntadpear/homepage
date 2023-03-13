@@ -23,6 +23,7 @@ export default component$(() => {
             url={post.url}
             showCTA
             tag="h2"
+            key={post.url}
           />
         ))}
       </div>

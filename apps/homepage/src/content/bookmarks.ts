@@ -83,5 +83,9 @@ export default [
   {
     title: "A beginner’s guide to Chrome tracing",
     url: "https://nolanlawson.com/2022/10/26/a-beginners-guide-to-chrome-tracing/"
+  },
+  {
+    title: "Streams—The definitive guide",
+    url: "https://web.dev/streams"
   }
 ];

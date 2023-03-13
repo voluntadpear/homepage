@@ -48,7 +48,7 @@ export const MobileMenu = component$(() => {
       <nav class="mt-36 ml-8">
         <ul class="flex flex-col space-y-8 text-3xl text-my-blue">
           {menuItems.map((item) => (
-            <li>
+            <li key={item.url}>
               <a href={item.url} onClick$={hideMenu} key={item.url}>
                 {item.label}
               </a>
@@ -74,7 +74,7 @@ export const DesktopMenu = component$(() => {
     <nav class="hidden md:block lg:max-w-5xl mx-auto">
       <ul class="flex justify-around pt-9 text-my-blue lg:text-lg lg:pt-16 lg:justify-between">
         {menuItems.map((item) => (
-          <li>
+          <li key={item.url}>
             <a href={item.url} key={item.url}>
               {item.label}
             </a>
