@@ -1,7 +1,8 @@
 import { component$ } from "@builder.io/qwik";
-import { DocumentHead } from "@builder.io/qwik-city";
 import Card from "~/components/card";
 import { extractFrontmatter, posts } from "posts";
+
+import type { DocumentHead } from "@builder.io/qwik-city";
 
 export default component$(() => {
   const allPosts = [...posts].reverse().map((post) => {

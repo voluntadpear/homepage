@@ -1,34 +1,27 @@
-import {
-  component$,
-  createContext,
-  useContextProvider,
-  useStore,
-} from "@builder.io/qwik";
-import {
-  QwikCity,
-  RouterOutlet,
-  ServiceWorkerRegister,
-} from "@builder.io/qwik-city";
-import { RouterHead } from "./components/router-head";
+import { component$, createContextId, useContextProvider, useSignal } from '@builder.io/qwik';
+import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
+import { RouterHead } from './components/router-head/router-head';
 
-import "./global.css";
+import type { Signal } from '@builder.io/qwik';
 
-export const MenuContext = createContext<{ menuVisible: boolean }>(
+import './global.css';
+
+export const MenuContext = createContextId<Signal<boolean>>(
   "menu-context"
 );
 
 export default component$(() => {
-  /*
-   * The root of a QwikCity site always start with the <QwikCity> component,
+  /**
+   * The root of a QwikCity site always start with the <QwikCityProvider> component,
    * immediately followed by the document's <head> and <body>.
    *
    * Dont remove the `<head>` and `<body>` elements.
    */
-  const state = useStore({ menuVisible: false });
-  useContextProvider(MenuContext, state);
+  const menuVisible = useSignal(false)
+  useContextProvider(MenuContext, menuVisible);
 
   return (
-    <QwikCity>
+    <QwikCityProvider>
       <head>
         <meta charSet="utf-8" />
         <link
@@ -49,13 +42,12 @@ export default component$(() => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-
         <RouterHead />
       </head>
-      <body class={state.menuVisible ? "overflow-hidden" : undefined}>
+      <body class={menuVisible.value ? "overflow-hidden" : undefined} lang="en">
         <RouterOutlet />
         <ServiceWorkerRegister />
       </body>
-    </QwikCity>
+    </QwikCityProvider>
   );
 });

@@ -1,7 +1,8 @@
 import { component$ } from "@builder.io/qwik";
-import { DocumentHead } from "@builder.io/qwik-city";
 import VideoThumbnail from "~/components/video-thumbnail";
 import talks from "~/content/talks";
+
+import type { DocumentHead } from "@builder.io/qwik-city";
 
 export default component$(() => {
   return (

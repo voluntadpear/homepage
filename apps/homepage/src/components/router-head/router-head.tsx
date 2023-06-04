@@ -1,5 +1,5 @@
-import { component$ } from "@builder.io/qwik";
-import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
+import { component$ } from '@builder.io/qwik';
+import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
@@ -11,21 +11,20 @@ export const RouterHead = component$(() => {
     head.meta.find((m) => m.name === "description")?.content ??
     "Web developer that likes to tackle challenges, learn from them, write about them, and have fun while in the process!";
 
-  if (head.frontmatter?.summary) {
-    description = head.frontmatter.summary;
-  }
+    if (head.frontmatter?.summary) {
+      description = head.frontmatter.summary;
+    }
 
   return (
     <>
       <title>{head.title}</title>
 
-      <link rel="canonical" href={loc.href} />
+      <link rel="canonical" href={loc.url.href} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      { /* @ts-expect-error */ }
-      <link rel="preload" href="/quicksand-v30-latin-ext_latin-regular.woff2" as="font" type="font/woff2" crossorigin />
-      { /* @ts-expect-error */ }
-      <link rel="preload" href="/quicksand-v30-latin-ext_latin-300.woff2" as="font" type="font/woff2" crossorigin />
+      <link rel="preload" href="/quicksand-v30-latin-ext_latin-regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      <link rel="preload" href="/quicksand-v30-latin-ext_latin-300.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+
       <meta property="og:type" content="website" />
       <meta name="twitter:site" content="Guillermo Peralta Scura" />
       <meta name="twitter:card" content="summary_large_image" />
@@ -35,7 +34,7 @@ export const RouterHead = component$(() => {
       <meta name="twitter:title" content={head.title} />
 
       {head.meta.map((m) => (
-        <meta {...m} />
+        <meta key={m.key} {...m} />
       ))}
 
       <meta name="description" content={description} />
@@ -77,11 +76,11 @@ export const RouterHead = component$(() => {
       ) : null}
 
       {head.links.map((l) => (
-        <link {...l} />
+        <link key={l.key} {...l} />
       ))}
 
       {head.styles.map((s) => (
-        <style {...s.props} dangerouslySetInnerHTML={s.style} />
+        <style key={s.key} {...s.props} dangerouslySetInnerHTML={s.style} />
       ))}
     </>
   );

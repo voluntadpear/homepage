@@ -1,15 +1,16 @@
 # Build
 /dist
 /lib
+/lib-types
 /server
 
 # Development
 node_modules
+*.local
 
 # Cache
 .cache
 .mf
-.vscode
 .rollup.cache
 tsconfig.tsbuildinfo
 
@@ -23,6 +24,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Editor
+.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -35,5 +37,3 @@ lerna-debug.log*
 # Yarn
 .yarn/*
 !.yarn/releases
-public/og/*
-!public/og/.gitkeep

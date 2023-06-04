@@ -1,7 +1,9 @@
 import { component$, Slot } from "@builder.io/qwik";
-import { DocumentHead, useDocumentHead } from "@builder.io/qwik-city";
+import { useDocumentHead } from "@builder.io/qwik-city";
 import { DesktopMenu, MobileMenu } from "~/components/header";
 import { GitHub, LinkedIn, Twitter } from "~/components/icons/qwik";
+
+import type {DocumentHead} from "@builder.io/qwik-city";
 
 export const titleSuffix = " | Guille";
 

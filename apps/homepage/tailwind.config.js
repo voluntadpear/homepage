@@ -3,7 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
 module.exports = {
-  content: ["./src/**/*.{html,js,tsx,mdx}"],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     blurSize: {},
     extend: {
@@ -23,7 +23,6 @@ module.exports = {
     },
   },
   plugins: [
-    require("@tailwindcss/line-clamp"),
     require("@tailwindcss/typography"),
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(

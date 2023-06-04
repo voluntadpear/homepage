@@ -1,6 +1,6 @@
 import { component$, Slot, useContext, $ } from "@builder.io/qwik";
 import { MenuContext } from "~/root";
-import { Close, Hamburger } from "./icons/qwik";
+import { Close, Hamburger } from "./qwik";
 
 export default component$(({ id, contentId }: { id?: string, contentId: string }) => {
   return (
