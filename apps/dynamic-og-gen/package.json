@@ -4,7 +4,6 @@
   "description": "",
   "main": "./dist/index.cjs",
   "source": "src/index.tsx",
-  "type": "module",
   "exports": {
     "require": "./dist/index.cjs",
     "default": "./dist/index.modern.js"
@@ -20,14 +19,14 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.11.9",
-    "@types/react": "^18.0.25",
-    "@types/sharp": "^0.31.0",
+    "@types/react": "^18.2.0",
+    "@types/sharp": "^0.31.1",
     "microbundle": "^0.15.1",
-    "satori": "^0.0.43"
+    "satori": "^0.10.0"
   },
   "dependencies": {
-    "@resvg/resvg-js": "^2.1.0",
+    "@resvg/resvg-js": "^2.4.1",
     "react": "^18.2.0",
-    "sharp": "^0.31.2"
+    "sharp": "^0.32.1"
   }
 }
