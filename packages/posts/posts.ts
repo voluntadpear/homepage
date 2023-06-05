@@ -61,4 +61,15 @@ export default [
     summary:
       "A description of nonintuitive ways in which margin collapsing impacts our layout",
   },
+  {
+    title: "How to Build a Tauri PDF Viewer with PSPDFKit",
+    url: "https://pspdfkit.com/blog/2023/how-to-build-a-tauri-pdf-viewer-with-pspdfkit/",
+    summary: "A guide on creating a Tauri PDF viewer highlighting Tauri's versatility and performance benefits."
+  },
+  {
+    title: "Why I Chose Deno to Automate My Summary of the Day",
+    url: "https://pspdfkit.com/blog/2023/how-i-used-deno-to-automate-my-summary/",
+    summary:
+      "A walkthrough a Deno script I wrote to automate my daily tasks summary",
+  },
 ];

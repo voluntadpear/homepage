@@ -29,5 +29,12 @@ export default [
     thumbnail: "/video4.webp",
     url: "https://www.youtube.com/watch?v=aMkbGE2Wnfc",
     lang: "en"
+  },
+  {
+    title: "\"Resumability in Qwik\" Talk Practice with Rizèl and Ramón!",
+    description: "Practice of a lightning talk about the concept of \"resumability\" in Qwik",
+    thumbnail: "/video5.webp",
+    url: "https://www.youtube.com/watch?v=aMkbGE2Wnfc",
+    lang: "en"
   }
 ] as const;

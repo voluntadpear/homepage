@@ -91,5 +91,17 @@ export default [
   {
     title: "Smooth and simple transitions with the View Transitions API",
     url: "https://developer.chrome.com/docs/web-platform/view-transitions/"
+  },
+  {
+    title: "Memory Allocation",
+    url: "https://samwho.dev/memory-allocation/"
+  },
+  {
+    title: "JS private class fields considered harmful",
+    url: "https://lea.verou.me/2023/04/private-fields-considered-harmful/"
+  },
+  {
+    title: "See this page fetch itself, byte by byte, over TLS",
+    url: "https://subtls.pages.dev/"
   }
 ];
