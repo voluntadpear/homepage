@@ -50,58 +50,64 @@ export default [
   },
   {
     title: "A Comprehensive Guide to Font Loading Strategies",
-    url: "https://www.zachleat.com/web/comprehensive-webfonts/"
+    url: "https://www.zachleat.com/web/comprehensive-webfonts/",
   },
   {
     title: "View Transitions API Explainer",
-    url: "https://github.com/WICG/view-transitions/blob/main/explainer.md"
+    url: "https://github.com/WICG/view-transitions/blob/main/explainer.md",
   },
   {
     title: "Laws of UX",
-    url: "https://lawsofux.com/"
+    url: "https://lawsofux.com/",
   },
   {
     title: "Making the world’s fastest website, and other mistakes",
-    url: "https://dev.to/tigt/making-the-worlds-fastest-website-and-other-mistakes-56na"
+    url: "https://dev.to/tigt/making-the-worlds-fastest-website-and-other-mistakes-56na",
   },
   {
-    title: "26 programming languages in 25 days: Reflections on language design",
-    url: "https://matt.might.net/articles/26-languages-part2/"
+    title:
+      "26 programming languages in 25 days: Reflections on language design",
+    url: "https://matt.might.net/articles/26-languages-part2/",
   },
   {
     title: "The gotcha of unhandled promise rejections",
-    url: "https://jakearchibald.com/2023/unhandled-rejections/"
+    url: "https://jakearchibald.com/2023/unhandled-rejections/",
   },
   {
     title: "Our top Core Web Vitals recommendations for 2023",
-    url: "https://web.dev/top-cwv-2023/"
+    url: "https://web.dev/top-cwv-2023/",
   },
   {
     title: "Fixing a Memory Leak in a Production Node.js App",
-    url: "https://kentcdodds.com/blog/fixing-a-memory-leak-in-a-production-node-js-app"
+    url: "https://kentcdodds.com/blog/fixing-a-memory-leak-in-a-production-node-js-app",
   },
   {
     title: "A beginner’s guide to Chrome tracing",
-    url: "https://nolanlawson.com/2022/10/26/a-beginners-guide-to-chrome-tracing/"
+    url: "https://nolanlawson.com/2022/10/26/a-beginners-guide-to-chrome-tracing/",
   },
   {
     title: "Streams—The definitive guide",
-    url: "https://web.dev/streams"
+    url: "https://web.dev/streams",
   },
   {
     title: "Smooth and simple transitions with the View Transitions API",
-    url: "https://developer.chrome.com/docs/web-platform/view-transitions/"
+    url: "https://developer.chrome.com/docs/web-platform/view-transitions/",
   },
   {
     title: "Memory Allocation",
-    url: "https://samwho.dev/memory-allocation/"
+    url: "https://samwho.dev/memory-allocation/",
   },
   {
     title: "JS private class fields considered harmful",
-    url: "https://lea.verou.me/2023/04/private-fields-considered-harmful/"
+    url: "https://lea.verou.me/2023/04/private-fields-considered-harmful/",
   },
   {
     title: "See this page fetch itself, byte by byte, over TLS",
-    url: "https://subtls.pages.dev/"
-  }
+    url: "https://subtls.pages.dev/",
+  },
+  {
+    title:
+      "Why We Should Stop Using JavaScript According to Douglas Crockford (Inventor of JSON)",
+    url: "https://www.youtube.com/watch?v=lc5Np9OqDHU",
+  },
 ];
