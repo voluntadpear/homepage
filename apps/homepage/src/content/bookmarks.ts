@@ -106,8 +106,7 @@ export default [
     url: "https://subtls.pages.dev/",
   },
   {
-    title:
-      "Why We Should Stop Using JavaScript According to Douglas Crockford (Inventor of JSON)",
+    title: "Why We Should Stop Using JavaScript According to Douglas Crockford",
     url: "https://www.youtube.com/watch?v=lc5Np9OqDHU",
   },
 ];
