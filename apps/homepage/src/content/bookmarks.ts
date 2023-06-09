@@ -109,4 +109,12 @@ export default [
     title: "Why We Should Stop Using JavaScript According to Douglas Crockford",
     url: "https://www.youtube.com/watch?v=lc5Np9OqDHU",
   },
+  {
+    title: "The History of the URL",
+    url: "https://blog.cloudflare.com/the-history-of-the-url/",
+  },
+  {
+    title: "RFC 9110: HTTP Semantics",
+    url: "https://www.rfc-editor.org/rfc/rfc9110",
+  },
 ];
