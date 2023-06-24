@@ -117,4 +117,8 @@ export default [
     title: "RFC 9110: HTTP Semantics",
     url: "https://www.rfc-editor.org/rfc/rfc9110",
   },
+  {
+    title: "The Cost Of JavaScript - 2023",
+    url: "https://www.youtube.com/watch?v=ZKH3DLT4BKw",
+  },
 ];
