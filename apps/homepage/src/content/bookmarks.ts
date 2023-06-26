@@ -121,4 +121,8 @@ export default [
     title: "The Cost Of JavaScript - 2023",
     url: "https://www.youtube.com/watch?v=ZKH3DLT4BKw",
   },
+  {
+    title: "The Next Generation of Serverless is Happening",
+    url: "https://www.fermyon.com/blog/next-generation-of-serverless-is-happening",
+  },
 ];
