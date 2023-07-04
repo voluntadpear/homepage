@@ -125,4 +125,8 @@ export default [
     title: "The Next Generation of Serverless is Happening",
     url: "https://www.fermyon.com/blog/next-generation-of-serverless-is-happening",
   },
+  {
+    title: "Understanding SVG Paths",
+    url: "https://www.nan.fyi/svg-paths",
+  },
 ];
