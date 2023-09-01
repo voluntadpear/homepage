@@ -129,4 +129,17 @@ export default [
     title: "Understanding SVG Paths",
     url: "https://www.nan.fyi/svg-paths",
   },
+  {
+    title: "Building future facing frontend architectures",
+    url: "https://frontendmastery.com/posts/building-future-facing-frontend-architectures",
+  },
+  {
+    title: "Keeping Figma fast",
+    url: "https://www.figma.com/blog/keeping-figma-fast/",
+  },
+  {
+    title:
+      "Most React components offered by products aren’t usable. Why ours are different.",
+    url: "https://blog.dopt.com/why-our-components-are-different",
+  },
 ];
