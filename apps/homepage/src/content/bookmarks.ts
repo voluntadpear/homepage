@@ -142,4 +142,12 @@ export default [
       "Most React components offered by products aren’t usable. Why ours are different.",
     url: "https://blog.dopt.com/why-our-components-are-different",
   },
+  {
+    title: "HarfBuzz Manual",
+    url: "https://harfbuzz.github.io/",
+  },
+  {
+    title: "Text Rendering Hates You",
+    url: "https://faultlore.com/blah/text-hates-you/",
+  },
 ];
