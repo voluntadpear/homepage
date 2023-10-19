@@ -154,4 +154,8 @@ export default [
     title: "Photoshop is now on the web!",
     url: "https://medium.com/@addyosmani/photoshop-is-now-on-the-web-38d70954365a",
   },
+  {
+    title: "Implementing Debounce in Javascript",
+    url: "https://medium.com/@griffinmichl/implementing-debounce-in-javascript-eab51a12311e",
+  },
 ];
