@@ -158,4 +158,12 @@ export default [
     title: "Implementing Debounce in Javascript",
     url: "https://medium.com/@griffinmichl/implementing-debounce-in-javascript-eab51a12311e",
   },
+  {
+    title: "Habits of great software engineers",
+    url: "https://vadimkravcenko.com/shorts/habits-of-great-software-engineers/",
+  },
+  {
+    title: "Random Thoughts 15 years into Software Engineering",
+    url: "https://roughlywritten.substack.com/p/random-thoughts-15-years-into-software",
+  },
 ];
