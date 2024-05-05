@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "name": "Guillermo Peralta Scura",
-  "short_name": "Guillermo Peralta Scura",
+  "name": "Guille Scura",
+  "short_name": "Guille Scura",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

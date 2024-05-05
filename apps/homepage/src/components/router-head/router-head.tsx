@@ -26,7 +26,7 @@ export const RouterHead = component$(() => {
       <link rel="preload" href="/quicksand-v30-latin-ext_latin-300.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
       <meta property="og:type" content="website" />
-      <meta name="twitter:site" content="Guillermo Peralta Scura" />
+      <meta name="twitter:site" content="Guille Scura" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta property="twitter:domain" content="scura.dev" />
       <meta name="twitter:creator" content="@voluntadpear" />
@@ -56,7 +56,7 @@ export const RouterHead = component$(() => {
             content={
               head.frontmatter?.og_img
                 ? head.title
-                : "Guillermo Peralta Scura, front-end developer"
+                : "Guille Scura, front-end developer"
             }
           />
           <meta property="og:image:width" content="1280" />

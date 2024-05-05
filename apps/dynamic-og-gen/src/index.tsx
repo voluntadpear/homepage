@@ -45,7 +45,7 @@ async function generateSVG(title: string, ogImgPath: string) {
         >
           {title}
         </span>
-        <span style={{ fontSize: 44 }}>Guillermo Peralta Scura</span>
+        <span style={{ fontSize: 44 }}>Guille Scura</span>
       </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"

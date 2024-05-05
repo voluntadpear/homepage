@@ -31,7 +31,7 @@ return (
     <Header id="top" contentId="latest-posts">
       <div class="lg:max-w-5xl lg:mx-auto">
         <h1 class="text-3xl md:text-5xl text-my-blue text-center mt-36 md:mt-72 opacity-0 name motion-reduce:opacity-100">
-          Guillermo Peralta Scura
+          Guille Scura
         </h1>
         <p class="text-xl md:text-3xl text-my-blue text-center mt-3.5 md:mt-6 opacity-0 subtitle motion-reduce:opacity-100">
           Front-end Developer
@@ -262,7 +262,7 @@ return (
 });
 
 export const head: DocumentHead = {
-title: "Guillermo Peralta Scura",
+title: "Guille Scura",
 meta: [
   {
     name: "description",
