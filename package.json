@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "npm run build --workspace=packages/posts && npm run dev --workspace=apps/homepage",
-    "build": "npm run build --workspace=packages/posts && npm run build --workspace=apps/dynamic-og-gen && node apps/dynamic-og-gen/dist/index.js && npm run build --workspace=apps/homepage"
+    "build": "npm run build --workspace=packages/posts && npm run build --workspace=apps/homepage"
   },
   "repository": {
     "type": "git",
